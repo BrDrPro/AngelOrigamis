@@ -1,0 +1,185 @@
+@media (max-width: 768px) {
+  .home-container {
+    padding: 0.5rem;
+  }
+
+  .hero {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .hero-content h1 {
+    font-size: 1.5rem;
+  }
+
+  .featured-products h2,
+  .benefits h2,
+  .testimonials h2,
+  .newsletter h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .carousel-track {
+    justify-content: flex-start !important;
+    gap: 4px !important;
+  }
+
+  .carousel-item {
+    flex: 1 1 0;
+    max-width: 220px;
+    min-width: 120px;
+    margin: 0;
+  }
+
+  .carousel-item img,
+  .product-image {
+    max-width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .product-card {
+    width: 100%;
+    height: auto;
+    padding: 0.5rem;
+  }
+
+  .product-image-container {
+    height: 180px;
+  }
+
+  .product-card h3 {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+  }
+
+  .add-cart-btn,
+  .cta-button {
+    font-size: 0.85rem !important;
+    padding: 0.35rem 0.7rem !important;
+    width: 100%;
+    min-width: 90px !important;
+    max-width: 140px !important;
+    border-radius: 4px !important;
+    margin: 0.3rem auto !important;
+    display: block !important;
+  }
+
+  .benefits-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .testimonial-container {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .testimonial-card,
+  .recado-card {
+    max-width: 95vw;
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .newsletter {
+    padding: 1rem;
+  }
+
+  .newsletter-form {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .newsletter-form input,
+  .newsletter-form button {
+    width: 140px !important;
+    max-width: 140px !important;
+    min-width: 90px !important;
+    font-size: 0.95rem !important;
+    box-sizing: border-box;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .modal-card .product-image-container {
+    height: 220px;
+    min-height: 180px;
+    max-height: 240px;
+  }
+
+  .carousel-button.prev,
+  .carousel-button.next {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-container {
+    padding: 0.2rem;
+  }
+
+  .hero-content h1 {
+    font-size: 1.1rem;
+  }
+
+  .product-card h3 {
+    font-size: 0.95rem;
+  }
+
+  .add-cart-btn,
+  .cta-button {
+    font-size: 0.75rem !important;
+    padding: 0.25rem 0.5rem !important;
+    min-width: 70px !important;
+    max-width: 110px !important;
+    border-radius: 4px !important;
+    margin: 0.2rem auto !important;
+    display: block !important;
+  }
+
+  .product-image-container {
+    height: 120px;
+  }
+
+  .modal-card .product-image-container {
+    height: 140px;
+    min-height: 120px;
+    max-height: 160px;
+  }
+
+  .carousel-item {
+    flex: 1 1 0;
+    max-width: 160px;
+    min-width: 90px;
+    margin: 0;
+  }
+
+  .carousel-item img,
+  .product-image {
+    height: 90px;
+  }
+
+  .carousel-track {
+    justify-content: flex-start !important;
+    gap: 4px !important;
+  }
+
+  .carousel-item {
+    margin: 0;
+  }
+
+  .newsletter-form input,
+  .newsletter-form button {
+    width: 110px !important;
+    max-width: 110px !important;
+    min-width: 70px !important;
+    font-size: 0.85rem !important;
+    box-sizing: border-box;
+    margin: 0 auto;
+    display: block;
+  }
+}

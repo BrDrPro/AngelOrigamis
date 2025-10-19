@@ -1,0 +1,87 @@
+@media (max-width: 768px) {
+  .site-header {
+    position: static !important; /* Garante que sobrescreva */
+    box-shadow: none;
+  }
+
+  .header-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 0.7rem 0.5rem;
+    gap: 0.5rem;
+  }
+
+  .main-nav ul {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .main-nav li {
+    margin-left: 0;
+  }
+
+  .cta-button {
+    width: auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  .site-logo {
+    height: 60px;
+    max-width: 120px;
+  }
+
+  .site-header .cta-button button {
+    font-size: 0.9rem !important;
+    padding: 0.15rem 1.2rem !important;
+    min-width: 120px !important;
+    max-width: 90vw !important;
+  }
+
+  .encomendar-btn {
+    width: auto !important;
+    max-width: 220px !important;
+    min-width: 120px !important;
+    font-size: 0.9rem !important;
+    padding: 0.15rem 1.2rem !important;
+    background: var(--rosa-logo) !important;
+    color: var(--bege-logo) !important;
+    border-radius: 4px !important;
+    border: none !important;
+    box-sizing: border-box !important;
+    display: inline-block !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-container {
+    padding: 0.4rem 0.2rem;
+  }
+
+  .site-logo {
+    height: 44px;
+    max-width: 90px;
+  }
+
+  .main-nav a,
+  .nav-btn,
+  .cta-button button {
+    font-size: 0.85rem;
+  }
+
+  .cta-button button {
+    font-size: 0.8rem !important;
+    padding: 0.12rem 0.8rem !important;
+    min-width: 100px !important;
+    max-width: 90vw !important;
+  }
+
+  .encomendar-btn {
+    font-size: 0.8rem !important;
+    padding: 0.12rem 0.8rem !important;
+    min-width: 100px !important;
+    max-width: 180px !important;
+    width: auto !important;
+  }
+}

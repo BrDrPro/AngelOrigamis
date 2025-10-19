@@ -1,0 +1,289 @@
+.about-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Hero Section */
+.about-hero {
+  background-color: var(--bege-logo);
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.about-hero-content h1 {
+  font-size: 2.5rem;
+  color: var(--rosa-logo);
+  font-family: var(--fonte-titulo);
+  margin-bottom: 0.5rem;
+  font-weight: 400;
+}
+
+.about-hero-content p {
+  font-size: 1.1rem;
+  color: var(--verde-logo);
+  font-family: var(--fonte-texto);
+}
+
+.about-hero-flex {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.about-hero-image img {
+  width: 330px;
+  max-width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  object-fit: cover;
+}
+
+.about-hero-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* About Sections */
+.about-section {
+  margin-bottom: 3rem;
+}
+
+.about-content h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: var(--rosa-logo);
+  font-family: var(--fonte-titulo);
+  margin-bottom: 1.5rem;
+  font-weight: 400;
+  position: relative;
+}
+
+.about-content h2::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 3px;
+  background-color: var(--rosa-logo);
+  border-radius: 2px;
+}
+
+.about-text p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  color: var(--verde-logo);
+  font-family: var(--fonte-texto);
+}
+
+/* Our Story */
+.about-story {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.about-image {
+  height: 300px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+}
+
+/* Mission & Values */
+.mission-section {
+  background-color: var(--bege-logo);
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.values-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.value-card {
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.value-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--rosa-logo);
+}
+
+.value-card h3 {
+  color: var(--verde-logo);
+  margin-bottom: 0.5rem;
+  font-family: var(--fonte-titulo);
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.value-card p {
+  color: var(--verde-logo);
+  line-height: 1.5;
+  font-family: var(--fonte-texto);
+}
+
+/* Team */
+.team-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.team-member {
+  text-align: center;
+}
+
+.member-image {
+  height: 150px;
+  width: 150px;
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+}
+
+.team-member h3 {
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.member-role {
+  color: #ff6b6b;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.team-member p {
+  color: #666;
+  line-height: 1.5;
+}
+
+/* CTA Section */
+.about-cta {
+  background-color: var(--bege-logo);
+  text-align: center;
+  padding: 2.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.about-cta h2 {
+  font-size: 2rem;
+  color: var(--rosa-logo);
+  font-family: var(--fonte-titulo);
+  margin-bottom: 0.5rem;
+  font-weight: 400;
+}
+
+.about-cta p {
+  color: var(--verde-logo);
+  margin-bottom: 1.5rem;
+  font-family: var(--fonte-texto);
+}
+
+.cta-button {
+  background-color: var(--rosa-logo);
+  color: var(--bege-logo);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-family: var(--fonte-texto);
+  font-size: 1rem;
+}
+
+.cta-button:hover {
+  background-color: var(--verde-logo);
+  color: var(--bege-logo);
+}
+
+/* Exemplo para seções principais */
+.hero,
+.services-hero,
+.about-hero,
+.contact-hero,
+.newsletter,
+.services-cta,
+.about-cta {
+  background-color: var(--bege-logo);
+}
+
+.cta-button,
+.add-cart-btn,
+.submit-button {
+  background-color: var(--rosa-logo);
+  color: var(--bege-logo);
+}
+
+.cta-button:hover,
+.add-cart-btn:hover,
+.submit-button:hover {
+  background-color: var(--verde-logo);
+  color: var(--bege-logo);
+}
+
+.service-price,
+.price,
+.value-icon,
+.benefit-icon {
+  color: var(--rosa-logo);
+}
+
+.category-header,
+.category-header.dropdown-toggle {
+  border-left: 4px solid var(--rosa-logo);
+}
+
+.dropdown-arrow {
+  color: var(--rosa-logo);
+}
+
+.about-image.origami-image img {
+  width: 220px;
+  max-width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  object-fit: cover;
+  display: block;
+}
+
+.about-origami-container {
+  width: 100%;
+  background: var(--bege-logo); /* igual ao fundo do site */
+  border-radius: 18px;
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 320px; /* altura menor */
+}
+
+.about-origami-img {
+  width: 100%;
+  height: 100%;
+  max-width: 1400px;   /* largura maior para esticar horizontalmente */
+  max-height: 400px;   /* altura menor */
+  border-radius: 18px;
+  object-fit: cover;
+  object-position: top; /* mostra o topo da imagem */
+  display: block;
+  background: var(--bege-logo);
+}

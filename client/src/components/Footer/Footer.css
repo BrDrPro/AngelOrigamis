@@ -1,0 +1,133 @@
+:root {
+  --rosa-logo: #D19AAE;
+  --verde-logo: #6D9E8B;
+  --bege-logo: #FFF6EB;
+  --fonte-titulo: 'Allura', cursive;
+  --fonte-texto: 'Montserrat', sans-serif;
+}
+
+body {
+  background: var(--bege-logo);
+  font-family: var(--fonte-texto);
+  color: var(--verde-logo);
+}
+
+.site-footer {
+  background-color: var(--verde-logo);
+  color: var(--bege-logo);
+  padding: 0.5rem 0 0.1rem; /* Reduzido */
+  margin-top: 0.5rem;
+  font-family: var(--fonte-texto);
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 0.5rem; /* Reduzido */
+}
+
+.footer-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem; /* Aumentado */
+  justify-content: center;
+  margin-bottom: 0.5rem; /* Reduzido */
+}
+
+.footer-column {
+  min-width: 180px; /* Reduzido */
+  flex: 1 1 180px;
+  margin-bottom: 0.5rem; /* Reduzido */
+}
+
+.footer-column h3 {
+  color: var(--rosa-logo);
+  font-family: var(--fonte-titulo);
+  font-size: 1.35rem; /* Aumentado */
+  margin-bottom: 0.3rem; /* Aumentado */
+  font-weight: 400;
+}
+
+.footer-column p,
+.footer-column address,
+.footer-column a,
+.footer-bottom,
+.footer-bottom-links a {
+  font-family: var(--fonte-texto);
+  color: var(--bege-logo);
+  font-size: 0.75rem; /* Reduzido */
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 0.15rem; /* Reduzido */
+}
+
+.footer-column a,
+.footer-bottom,
+.footer-bottom-links a {
+  color: var(--bege-logo);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-size: 0.75rem; /* Reduzido */
+}
+
+.footer-column a:hover,
+.footer-bottom-links a:hover {
+  color: var(--rosa-logo);
+}
+
+/* Alterando para exibir em coluna */
+.social-links {
+  display: flex;
+  flex-direction: column; /* Mudado para coluna */
+  gap: 0.5rem; /* Aumentado para mais espaçamento */
+}
+
+.social-links a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  color: var(--bege-logo);
+  text-decoration: none;
+  margin-bottom: 1rem;
+}
+
+.social-links a:hover {
+  color: var(--rosa-logo);
+}
+
+.social-links a svg {
+  font-size: 1.5rem;
+}
+
+.footer-column address svg {
+  font-size: 1.5rem;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 0.1rem;
+  display: flex;
+  justify-content: space-between; /* Mantém alinhamento em linha */
+  align-items: center;            /* Alinha verticalmente */
+  flex-wrap: wrap;
+  font-size: 0.7rem;
+  color: #fff;
+  font-family: var(--fonte-texto);
+  text-align: left;
+}
+
+.footer-bottom-links {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center; /* Garante alinhamento vertical */
+}

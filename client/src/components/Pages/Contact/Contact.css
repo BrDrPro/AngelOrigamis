@@ -1,0 +1,294 @@
+.contact-container {
+  font-family: var(--fonte-texto);
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Hero Section */
+.contact-hero {
+  background-color: #f8f1e9;
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.contact-hero-content h1 {
+  font-size: 2.2rem;
+  color: var(--rosa-logo);
+  font-family: var(--fonte-titulo);
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+}
+
+.contact-hero-content p {
+  font-size: 1.1rem;
+  color: var(--verde-logo);
+  font-family: var(--fonte-texto);
+}
+
+/* Contact Info and Form */
+.contact-main {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-bottom: 3rem;
+  gap: 0;
+}
+
+/* Contact Info */
+.contact-info h2,
+.contact-form-container h2 {
+  margin-bottom: 1.5rem;
+  color: var(--rosa-logo);
+  font-family: var(--fonte-titulo);
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.info-item {
+  display: flex;
+  margin-bottom: 1.5rem;
+}
+
+.info-icon {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  min-width: 30px;
+  color: var(--rosa-logo);
+}
+
+.info-content h3 {
+  font-size: 1.1rem;
+  color: var(--verde-logo);
+  font-family: var(--fonte-titulo);
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+}
+
+.info-content p {
+  color: var(--verde-logo);
+  font-family: var(--fonte-texto);
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+}
+
+/* Contact Form */
+.contact-form-container {
+  max-width: 420px;
+  width: 100%;
+  margin: 0 auto;
+  /* Garante centralização e limite de largura */
+}
+
+.contact-form-container.contact-form-expanded {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.contact-form {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  font-family: var(--fonte-texto);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--verde-logo);
+  font-family: var(--fonte-texto);
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--rosa-logo);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-family: var(--fonte-texto);
+  box-sizing: border-box;
+  /* já existente, mas reforçado para responsividade */
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.submit-button {
+  background-color: var(--rosa-logo);
+  color: var(--bege-logo);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.submit-button:hover {
+  background-color: var(--verde-logo);
+  color: var(--bege-logo);
+}
+
+/* Map Section */
+.map-section {
+  margin-bottom: 3rem;
+}
+
+.map-section h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.map-container {
+  border-radius: 8px;
+  overflow: hidden;
+  height: 300px;
+}
+
+.map-placeholder {
+  background-color: #f0f0f0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* FAQ Section */
+.faq-section {
+  margin-bottom: 3rem;
+}
+
+.faq-section h2 {
+  color: var(--rosa-logo);
+  font-family: var(--fonte-titulo);
+  font-size: 1.5rem;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.faq-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.faq-item {
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.faq-item h3 {
+  color: var(--verde-logo);
+  font-family: var(--fonte-titulo);
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin-bottom: 0.75rem;
+}
+
+.faq-item p {
+  color: var(--verde-logo);
+  font-family: var(--fonte-texto);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Exemplo para seções principais */
+.hero,
+.services-hero,
+.about-hero,
+.contact-hero,
+.newsletter,
+.services-cta,
+.about-cta {
+  background-color: var(--bege-logo);
+}
+
+.cta-button,
+.add-cart-btn,
+.submit-button {
+  background-color: var(--rosa-logo);
+  color: var(--bege-logo);
+}
+
+.cta-button:hover,
+.add-cart-btn:hover,
+.submit-button:hover {
+  background-color: var(--verde-logo);
+  color: var(--bege-logo);
+}
+
+.service-price,
+.price,
+.value-icon,
+.benefit-icon {
+  color: var(--rosa-logo);
+}
+
+.category-header,
+.category-header.dropdown-toggle {
+  border-left: 4px solid var(--rosa-logo);
+}
+
+.dropdown-arrow {
+  color: var(--rosa-logo);
+}
+
+.contact-selects {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.contact-select-btn {
+  background: var(--bege-logo);
+  color: var(--verde-logo);
+  border: 2px solid var(--rosa-logo);
+  border-radius: 4px;
+  padding: 0.6rem 1.2rem;
+  font-family: var(--fonte-texto);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+
+.contact-select-btn.active,
+.contact-select-btn:hover {
+  background: var(--rosa-logo);
+  color: var(--bege-logo);
+  border-color: var(--rosa-logo);
+}
+
+.char-counter {
+  font-size: 0.85rem;
+  color: var(--verde-logo);
+  text-align: right;
+  margin-top: 0.2rem;
+  opacity: 0.7;
+}

@@ -1,0 +1,98 @@
+@media (max-width: 900px) {
+  .contact-container {
+    padding: 0 0.5rem;
+    max-width: 100vw;
+  }
+  .contact-hero {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  .contact-hero-content h1 {
+    font-size: 1.6rem;
+  }
+  .contact-hero-content p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-main {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  .contact-form-container,
+  .contact-form-container.contact-form-expanded {
+    max-width: 100vw;
+    padding: 0;
+  }
+  .contact-form {
+    padding: 1rem;
+    max-width: 100vw;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 0.95rem;
+    padding: 0.6rem;
+  }
+  .submit-button {
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+    margin-top: 0.7rem;
+    border-radius: 4px;
+    width: 100%;
+  }
+  .contact-selects {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.2rem;
+  }
+  .contact-select-btn {
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .faq-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .faq-item {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-container {
+    padding: 0 0.2rem;
+  }
+  .contact-hero-content h1 {
+    font-size: 1.1rem;
+  }
+  .contact-hero-content p {
+    font-size: 0.9rem;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 0.85rem;
+    padding: 0.45rem;
+  }
+  .submit-button {
+    font-size: 0.85rem;
+    padding: 0.35rem 0.7rem;
+    margin-top: 0.5rem;
+    border-radius: 4px;
+    width: 100%;
+  }
+  .contact-select-btn {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.7rem;
+    width: 100%;
+  }
+  .faq-item {
+    padding: 0.7rem;
+  }
+}
