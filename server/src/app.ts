@@ -2,14 +2,24 @@ import express from 'express';
 import cors from 'cors';
 import routes from './routes/index';
 import { sequelize } from './models';
-import productRoutes from './routes/product.routes';
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:3001',
+  'https://angelorigamis.com.br',
+  'https://www.angelorigamis.com.br'
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
 app.use(express.json());
 app.use('/api', routes);
-app.use('/products', productRoutes);
 
 // Sincroniza os models com o banco de dados
 sequelize.sync({ alter: true }).then(() => {

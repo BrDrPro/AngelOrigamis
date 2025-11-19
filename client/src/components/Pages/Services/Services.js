@@ -1,3 +1,5 @@
+// Atualização Natal 2024
+
 import React, { useState, useEffect, useContext } from 'react';
 import { CartContext } from '../../CartContext/CartContext';
 import { fetchProducts } from '../../../api/products';
@@ -25,9 +27,18 @@ function Services() {
 	const [modalImageIndex, setModalImageIndex] = useState(0);
 	const [carouselPaused, setCarouselPaused] = useState(false);
 	const [products, setProducts] = useState([]);
+	const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
 	useEffect(() => {
 		fetchProducts().then(setProducts).catch(console.error);
+	}, []);
+
+	useEffect(() => {
+		function handleResize() {
+			setIsMobile(window.innerWidth <= 768);
+		}
+		window.addEventListener('resize', handleResize);
+		return () => window.removeEventListener('resize', handleResize);
 	}, []);
 
 	const categories = groupProductsByCategory(products);
@@ -82,34 +93,42 @@ function Services() {
 			<section className="services-categories">
 				{Object.entries(categories)
 					.filter(([_, products]) => products.length > 0)
+					.sort(([categoryA], [categoryB]) => {
+						// Coloca "Decoração de Natal" sempre no topo
+						if (categoryA === 'Decoração de Natal') return -1;
+						if (categoryB === 'Decoração de Natal') return 1;
+						// Mantém a ordem alfabética para as demais categorias
+						return categoryA.localeCompare(categoryB);
+					})
 					.map(([categoryName, products]) => {
 						const index = carouselIndex[categoryName] || 0;
 						const itemsPerView = 3;
 						const maxIndex = Math.max(0, products.length - itemsPerView);
 
-						// Scroll infinito: mostra os produtos em sequência circular
-						const isMobile = window.innerWidth <= 768;
+						// Use isMobile para decidir o que renderizar
 						const visibleProducts = isMobile
 							? products
 							: products.slice(index, index + itemsPerView);
 
 						const isOpen = openCategories[categoryName];
 
+						const isChristmas = categoryName === 'Decoração de Natal';
+						
 						return (
-							<div key={categoryName} className="service-category">
+							<div key={categoryName} className={`service-category${isChristmas ? ' christmas-category' : ''}`}>
 								<button
 									className={`category-header dropdown-toggle${
 										isOpen ? ' open' : ''
-									}`}
+									}${isChristmas ? ' christmas-header' : ''}`}
 									onClick={() => toggleCategory(categoryName)}
 								>
 									<img
-										src="/assets/mandalarosa.png"
+										src={categoryName === 'Decoração de Natal' ? '/assets/natal.png' : '/assets/mandalarosa.png'}
 										alt=""
 										className="mandala-decor"
 										aria-hidden="true"
 									/>
-									<h3>{categoryName}</h3>
+									<h3 className={isChristmas ? 'christmas-title' : ''}>{categoryName}</h3>
 									<span className="dropdown-arrow">
 										{isOpen ? '▲' : '▼'}
 									</span>
@@ -122,7 +141,7 @@ function Services() {
 											</p>
 										)}
 										<div className="carousel-container">
-											{products.length > 3 && (
+											{!isMobile && products.length > 3 && (
 												<button
 													className="carousel-button prev"
 													onClick={() => prevSlide(categoryName, products.length)}
@@ -138,7 +157,15 @@ function Services() {
 											>
 												{visibleProducts.map((product) => (
 													<div key={product.id} className="carousel-item">
-														<div className="product-card">
+														<div
+															className="product-card"
+															onClick={() => {
+																setExpandedProduct(product);
+																setCarouselPaused(true);
+																setModalImageIndex(0);
+															}}
+															style={{ cursor: 'pointer' }}
+														>
 															<div
 																className="product-image-container"
 																style={{
@@ -155,14 +182,7 @@ function Services() {
 															/>
 															<h4>{product.name}</h4>
 															<div className="product-card-content">
-																<span
-																	className="descricao-link"
-																	onClick={() => {
-																		setExpandedProduct(product);
-																		setCarouselPaused(true);
-																		setModalImageIndex(0);
-																	}}
-																>
+																<span className="descricao-link">
 																	Descrição
 																</span>
 																<span className="service-price">
@@ -175,7 +195,10 @@ function Services() {
 																</span>
 																<button
 																	className="add-cart-btn"
-																	onClick={() => handleAdd(product)}
+																	onClick={e => {
+																		e.stopPropagation();
+																		handleAdd(product);
+																	}}
 																>
 																	Adicionar ao Carrinho
 																</button>
@@ -184,7 +207,7 @@ function Services() {
 													</div>
 												))}
 											</div>
-											{products.length > 3 && (
+											{!isMobile && products.length > 3 && (
 												<button
 													className="carousel-button next"
 													onClick={() => nextSlide(categoryName, products.length)}
@@ -265,6 +288,12 @@ function Services() {
 						</div>
 						<h3>{expandedProduct.name}</h3>
 						<p>{expandedProduct.description}</p>
+						<span
+							className="measure"
+							style={{ alignSelf: 'flex-start', color: 'var(--verde-logo)' }}
+						>
+							{expandedProduct.measure}
+						</span> 
 						<span className="service-price">
 							{typeof expandedProduct.price === 'number'
 								? `R$ ${Number(expandedProduct.price).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`

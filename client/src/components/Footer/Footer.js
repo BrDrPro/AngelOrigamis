@@ -42,9 +42,6 @@ function Footer() {
               <a href="https://www.facebook.com/share/17RmoTy3G8/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">
                 <FaFacebook /> Facebook
               </a>
-              <a href="https://pinterest.com" target="_blank" rel="noopener noreferrer">
-                <FaPinterest /> Pinterest
-              </a>
             </div>
           </div>
 

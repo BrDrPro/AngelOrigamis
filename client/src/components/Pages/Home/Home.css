@@ -885,3 +885,15 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.07);
   border: 1px solid #eee;
 }
+
+.measure {
+  display: block;
+  text-align: left;
+  margin: 8px 0 0 0;
+  font-weight: 500;
+  color: var(--verde-logo); /* Use a mesma cor do texto da descrição */
+}
+
+.modal-card .measure {
+  align-self: flex-start;
+}

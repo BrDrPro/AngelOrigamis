@@ -439,3 +439,23 @@
   filter: drop-shadow(0 2px 12px rgba(209,154,174,0.18));
   z-index: 1;
 }
+
+.modal-card .measure {
+  align-self: flex-start;
+  color: var(--verde-logo);
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* Estilos para categoria de Natal */
+.christmas-title {
+  color: #C41E3A !important; /* Vermelho natalino */
+}
+
+.christmas-header.open {
+  background-color: #6D9E8B !important; /* Verde da paleta */
+}
+
+.christmas-category .category-header.open {
+  background-color: #6D9E8B !important;
+}

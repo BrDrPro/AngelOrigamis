@@ -23,6 +23,7 @@ function Cart() {
                 />
                 <div className="cart-item-info">
                   <span className="cart-item-name">{item.name}</span>
+                  <span className="cart-item-measure">{item.measure}</span>
                   <span className="cart-item-qty">Qtd: {item.quantity}</span>
                   <span className="cart-item-price">
                     R$ {Number(item.price).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}

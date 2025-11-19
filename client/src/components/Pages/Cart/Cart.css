@@ -52,7 +52,7 @@
 }
 .cart-item-qty,
 .cart-item-price {
-  color: #888;
+  color: #6D9E8B; /* Verde da paleta */
   font-size: 0.95rem;
 }
 .cart-item-remove {

@@ -19,6 +19,7 @@ function Home() {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterMsg, setNewsletterMsg] = useState('');
   const [modalImageIndex, setModalImageIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   // Definir produtos em destaque iniciais
   useEffect(() => {
@@ -119,7 +120,7 @@ function Home() {
   async function handleNewsletterSubmit(e) {
     e.preventDefault();
     try {
-    await axios.post('http://localhost:3001/api/clients', { email: newsletterEmail });
+    await axios.post('https://angelorigamis.com.br/api/clients', { email: newsletterEmail });
       setNewsletterMsg('Inscrição realizada com sucesso!');
       setNewsletterEmail('');
     } catch (err) {
@@ -151,6 +152,16 @@ function Home() {
       .catch(console.error);
   }, []);
 
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 768);
+    }
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const productsToShow = isMobile ? featuredProducts : visibleProducts;
+
   return (
     <>
       <div className="home-container">
@@ -167,17 +178,30 @@ function Home() {
         <section className="featured-products">
           <h2>Criações em Destaque</h2>
           <div className="carousel-container">
-            <button className="carousel-button prev" onClick={prevSlide}>&#10094;</button>
-            
+            {/* Botões só aparecem em telas grandes */}
+            {window.innerWidth > 768 && (
+              <button className="carousel-button prev" onClick={prevSlide}>
+                &#10094;
+              </button>
+            )}
+
             <div className="carousel-track">
-              {visibleProducts.map((product) => (
+              {productsToShow.map((product) => (
                 <div key={product.id} className="carousel-item">
-                  <div className="product-card">
+                  <div
+                    className="product-card"
+                    onClick={() => {
+                      setExpandedProduct(product);
+                      setCarouselPaused(true);
+                      setModalImageIndex(0);
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  >
                     <div
                       className="product-image-container"
                       style={{
                         backgroundImage: `url(${product.imageUrls[0]})`,
-                        backgroundSize: 'cover',      // ou 'contain'
+                        backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         backgroundRepeat: 'no-repeat',
                         borderRadius: '8px',
@@ -187,19 +211,19 @@ function Home() {
                     />
                     <h3>{product.name}</h3>
                     <div className="product-card-content">
-                      <span
-                        className="descricao-link"
-                        onClick={() => {
-                          setExpandedProduct(product);
-                          setCarouselPaused(true);
-                        }}
-                      >
+                      <span className="descricao-link">
                         Descrição
                       </span>
                       <span className="price">
                         R$ {Number(product.price).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                       </span>
-                      <button className="add-cart-btn" onClick={() => handleAdd(product)}>
+                      <button
+                        className="add-cart-btn"
+                        onClick={e => {
+                          e.stopPropagation();
+                          handleAdd(product);
+                        }}
+                      >
                         Adicionar ao Carrinho
                       </button>
                     </div>
@@ -207,10 +231,14 @@ function Home() {
                 </div>
               ))}
             </div>
-            
-            <button className="carousel-button next" onClick={nextSlide}>&#10095;</button>
+
+            {window.innerWidth > 768 && (
+              <button className="carousel-button next" onClick={nextSlide}>
+                &#10095;
+              </button>
+            )}
           </div>
-          
+
           <div className="carousel-dots">
             {Array.from({ length: Math.ceil(featuredProducts.length / itemsPerView) }).map((_, index) => (
               <button 
@@ -339,6 +367,12 @@ function Home() {
               </div>
               <h3>{expandedProduct.name}</h3>
               <p>{expandedProduct.description}</p>
+              <span
+                className="measure"
+                style={{ alignSelf: 'flex-start' }}
+              >
+                {expandedProduct.measure}
+              </span>
               <span className="price">
                 R$ {Number(expandedProduct.price).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
               </span>

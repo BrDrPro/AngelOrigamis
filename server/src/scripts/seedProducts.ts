@@ -608,7 +608,7 @@ async function seed() {
     },
     {
       name: 'Marcadores de Página',
-      description: 'Marcadores de página em papel Keaft com Tsuru ou coração com Espírito Santo na ponta. No centro papéis estampados.',
+      description: 'Marcadores de página em papel Kraft com Tsuru ou coração com Espírito Santo na ponta. No centro papéis estampados.',
       price: 10,
       category: 'Material de Escritório',
       measure: '15 cm',
@@ -627,6 +627,159 @@ async function seed() {
       imageUrls: [
         '/Produtos/CadeirasdePraia/CadeirasdePraia.jpg',
         '/Produtos/CadeirasdePraia/CadeirasdePraia_2.jpg'
+      ],
+    },
+    // Decoração de Natal
+    {
+      name: 'Guirlanda de pérolas',
+      description: 'Guirlanda trabalhada em fio dourado formando chuveirinhos usando 1000 pérolas e mandala central com fundo em linho, pérolas em círculos e imagem de José, Maria e a manjedoura impressa em acrílico dourado.',
+      price: 260,
+      category: 'Decoração de Natal',
+      measure: 'Diâmetro: 45 cm',
+      imageUrls: [
+        '/Produtos/Natal/guirlanda_perolas.jpg',
+        '/Produtos/Natal/guirlanda_perolas2.jpg',
+        '/Produtos/Natal/guirlanda_perolas3.jpg'
+      ],
+    },
+    {
+      name: 'Colar de mesa verde e vermelho',
+      description: 'Colar composto com pérolas coloridas em tons fortes natalinos e peças amadeiradas e nas pontas pérolas maiores e tassel vermelhos.',
+      price: 160,
+      category: 'Decoração de Natal',
+      measure: '135 cm',
+      imageUrls: [
+        '/Produtos/Natal/Colar_mesa_verde_vermelho.jpg',
+        '/Produtos/Natal/Colar_mesa_verde_vermelho2.jpg',
+        '/Produtos/Natal/Colar_mesa_verde_vermelho3.jpg'
+      ],
+    },
+    {
+      name: 'Colar de mesa verde',
+      description: 'Colar composto com peças acrílicas transparentes verdes e detalhes dourados. Em uma ponta, árvore de Natal em madeira e na outra, tassel verde.',
+      price: 150,
+      category: 'Decoração de Natal',
+      measure: '125 cm',
+      imageUrls: [
+        '/Produtos/Natal/Colar_mesa_verde.jpg',
+        '/Produtos/Natal/Colar_mesa_verde2.jpg',
+        '/Produtos/Natal/Colar_mesa_verde3.jpg'
+      ],
+    },
+    {
+      name: 'Colar de mesa vermelho',
+      description: 'Colar composto com pérolas douradas e vermelhas, detalhes dourados e, nas pontas pérola vermelha grande e tassel vermelho.',
+      price: 150,
+      category: 'Decoração de Natal',
+      measure: '140 cm',
+      imageUrls: [
+        '/Produtos/Natal/Colar_mesa_vermelho.jpg',
+        '/Produtos/Natal/Colar_mesa_vermelho2.jpg',
+        '/Produtos/Natal/Colar_mesa_vermelho3.jpg'
+      ],
+    },
+    {
+      name: 'Trio de árvores vermelhas',
+      description: 'Conjunto de três árvores de Natal, cobertas por fio em cores natalinas, predominantemente vermelho. Meias pérolas coladas, em tamanhos diferentes, simulando gotas. Base redonda em madeira e uma flor vermelha de origami.',
+      price: 85,
+      category: 'Decoração de Natal',
+      measure: '14, 24 e 33 cm',
+      imageUrls: [
+        '/Produtos/Natal/Trio_arvores_vermelhas.jpeg'
+      ],
+    },
+    {
+      name: 'Trio de árvores douradas',
+      description: 'Conjunto de três árvores de Natal, cobertas por juta com fio dourado. Meias pérolas coladas, em tamanhos diferentes, simulando gotas. Base redonda em madeira e uma flor vermelha de origami.',
+      price: 85,
+      category: 'Decoração de Natal',
+      measure: '14, 24 e 33 cm',
+      imageUrls: [
+        '/Produtos/Natal/Trio_arvores_douradas.jpg',
+        '/Produtos/Natal/Trio_arvores_douradas2.jpg'
+      ],
+    },
+    {
+      name: 'Anjo em Pingente P',
+      description: 'Anjo dobrado com papel perolizado, auréola dourada e laço em fita simulando as asas.',
+      price: 15,
+      category: 'Decoração de Natal',
+      measure: '9 cm',
+      imageUrls: [
+        '/Produtos/Natal/Anjo_Pingente_P.jpg',
+        '/Produtos/Natal/Anjo_Pingente_P_2.jpg',
+        '/Produtos/Natal/Anjo_Pingente_P3.jpg',
+        '/Produtos/Natal/Anjo_Pingente_P4.jpg'
+      ],
+    },
+    {
+      name: 'Anjo em Pingente M',
+      description: 'Anjo dobrado com papel perolizado, auréola dourada e laço em fita simulando as asas.',
+      price: 20,
+      category: 'Decoração de Natal',
+      measure: '13 cm',
+      imageUrls: [
+        '/Produtos/Natal/Anjo_Pingente_M.jpg',
+        '/Produtos/Natal/Anjo_Pingente_P_2.jpg'
+      ],
+    },
+    {
+      name: 'Anjo em Pingente G',
+      description: 'Anjo dobrado com papel perolizado, auréola dourada e laço em fita simulando as asas.',
+      price: 25,
+      category: 'Decoração de Natal',
+      measure: '15 cm',
+      imageUrls: [
+        '/Produtos/Natal/Anjo_Pingente_G.jpg',
+        '/Produtos/Natal/Anjo_Pingente_G2.jpg'
+      ],
+    },
+    {
+      name: 'Guirlanda Floral P',
+      description: 'Guirlanda tecida em crochê usando um fio em cores natalinas. Arranjo em origami composto por flores vermelhas e douradas com pérolas e strass no centro e galhos verdes. Laço em gorgurão vermelho no centro.',
+      price: 130,
+      category: 'Decoração de Natal',
+      measure: '22 cm',
+      imageUrls: [
+        '/Produtos/Natal/Guirlanda_Floral_P.jpg',
+        '/Produtos/Natal/Guirlanda_Floral_P2.jpg',
+        '/Produtos/Natal/Guirlanda_Floral_P3.jpg'
+      ],
+    },
+    {
+      name: 'Guirlanda Floral G',
+      description: 'Guirlanda tecida em crochê usando um fio em cores natalinas. Arranjo em origami composto por flores vermelhas e douradas com pérolas e strass no centro e galhos verdes. Laço em gorgurão vermelho no centro.',
+      price: 150,
+      category: 'Decoração de Natal',
+      measure: '30 cm',
+      imageUrls: [
+        '/Produtos/Natal/Guirlanda_Floral_G.jpg',
+        '/Produtos/Natal/Guirlanda_Floral_G2.jpg',
+        '/Produtos/Natal/Guirlanda_Floral_G3.jpg'
+      ],
+    },
+    {
+      name: 'Escapulário de Porta Nude',
+      description: 'Escapulário em fita de gorgurão nude. Nas pontas, mandalas forradas com linho. De um lado, impressão Feliz Natal em acrílico dourado e na outra ponta, imagem da manjedoura, Maria e José, também impressa em acrílico dourado.',
+      price: 95,
+      category: 'Decoração de Natal',
+      measure: '168 cm',
+      imageUrls: [
+        '/Produtos/Natal/Escapulario_Porta_Nude.jpg',
+        '/Produtos/Natal/Escapulario_Porta_Nude2.jpg',
+        '/Produtos/Natal/Escapulario_Porta_Nude3.jpg'
+      ],
+    },
+    {
+      name: 'Escapulário de porta Floral',
+      description: 'Escapulário em fita de gorgurão vermelha. Nas pontas, mandalas forradas com linho e letras de mdf compondo Feliz Natal e flores vermelhas em origami e folhas plissadas verdes.',
+      price: 130,
+      category: 'Decoração de Natal',
+      measure: '152 cm',
+      imageUrls: [
+        '/Produtos/Natal/Escapulario_porta_Floral.jpg',
+        '/Produtos/Natal/Escapulario_porta_Floral2.jpg',
+        '/Produtos/Natal/Escapulario_porta_Floral3.jpg'
       ],
     },
   ];
