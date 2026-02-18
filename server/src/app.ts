@@ -1,6 +1,8 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import routes from './routes/index';
+import authRoutes from './routes/auth.routes';
 import { sequelize } from './models';
 
 const app = express();
@@ -19,6 +21,9 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json());
+
+// Rotas
+app.use('/api/auth', authRoutes);
 app.use('/api', routes);
 
 // Sincroniza os models com o banco de dados

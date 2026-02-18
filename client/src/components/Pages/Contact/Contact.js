@@ -24,8 +24,10 @@ function Contact() {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const formParam = params.get('form');
-    if (formParam === 'encomenda') setSelectedForm('encomenda');
-  }, [location.search]);
+    if (formParam === 'encomenda') {
+      setSelectedForm('encomenda');
+    }
+  }, [location.search, location.key]); // Adiciona location.key para forçar atualização
 
   function handleWhatsApp(e) {
     e.preventDefault();

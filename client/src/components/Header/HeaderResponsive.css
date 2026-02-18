@@ -1,6 +1,6 @@
 @media (max-width: 768px) {
   .site-header {
-    position: static !important; /* Garante que sobrescreva */
+    position: static !important;
     box-shadow: none;
   }
 
@@ -20,23 +20,9 @@
     margin-left: 0;
   }
 
-  .cta-button {
-    width: auto !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-  }
-
   .site-logo {
     height: 60px;
     max-width: 120px;
-  }
-
-  .site-header .cta-button button {
-    font-size: 0.9rem !important;
-    padding: 0.15rem 1.2rem !important;
-    min-width: 120px !important;
-    max-width: 90vw !important;
   }
 
   .encomendar-btn {
@@ -48,9 +34,8 @@
     background: var(--rosa-logo) !important;
     color: var(--bege-logo) !important;
     border-radius: 4px !important;
-    border: none !important;
-    box-sizing: border-box !important;
     display: inline-block !important;
+    box-sizing: border-box !important;
   }
 }
 
@@ -65,16 +50,8 @@
   }
 
   .main-nav a,
-  .nav-btn,
-  .cta-button button {
+  .nav-btn {
     font-size: 0.85rem;
-  }
-
-  .cta-button button {
-    font-size: 0.8rem !important;
-    padding: 0.12rem 0.8rem !important;
-    min-width: 100px !important;
-    max-width: 90vw !important;
   }
 
   .encomendar-btn {

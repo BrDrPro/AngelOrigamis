@@ -60,36 +60,6 @@
   color: #D19AAE;
 }
 
-.cta-button {
-  background: #D19AAE;
-  border-radius: 5px;
-  padding: 0.05rem 0.2rem;
-  transition: background 0.3s;
-  display: flex;
-  align-items: center;
-}
-
-.cta-button button {
-  background: transparent;
-  color: #FFF6EB;
-  border: none;
-  padding: 0.15rem 0.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.95rem;
-  transition: color 0.3s;
-}
-
-.cta-button:hover {
-  background: #6D9E8B;
-}
-
-.cta-button:hover button {
-  color: #FFF6EB;
-}
-
 .nav-btn {
   background: none;
   border: none;
@@ -106,4 +76,26 @@
 
 .header-logo {
   margin-bottom: 0.5rem;
+}
+
+/* Botão Encomendar - Tamanho desktop padrão */
+.encomendar-btn {
+  background: #D19AAE;
+  color: #FFF6EB;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  transition: background 0.3s, color 0.3s;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.encomendar-btn:hover {
+  background: #6D9E8B;
+  color: #FFF6EB;
 }

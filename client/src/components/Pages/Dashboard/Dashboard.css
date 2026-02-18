@@ -1,0 +1,256 @@
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+/* Sidebar */
+.dashboard-sidebar {
+  width: 280px;
+  background: #FFF6EB;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  padding: 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.sidebar-logo {
+  height: 60px;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-header h2 {
+  color: #6D9E8B;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 1rem 0;
+}
+
+.nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border: none;
+  background: transparent;
+  color: #6D9E8B;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+  text-align: left;
+}
+
+.nav-item:hover {
+  background: rgba(109, 158, 139, 0.1);
+}
+
+.nav-item.active {
+  background: #6D9E8B;
+  color: #FFF6EB;
+  font-weight: 600;
+}
+
+.nav-item .icon {
+  font-size: 1.3rem;
+}
+
+.sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.admin-info {
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.admin-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  color: #6D9E8B;
+  margin: 0 0 0.25rem 0;
+  font-size: 0.95rem;
+}
+
+.admin-email {
+  font-family: 'Montserrat', sans-serif;
+  color: #999;
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.logout-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: #D19AAE;
+  color: #FFF6EB;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.3s;
+}
+
+.logout-btn:hover {
+  background: #c41e3a;
+}
+
+/* Main Content */
+.dashboard-main {
+  margin-left: 280px;
+  flex: 1;
+  padding: 2rem;
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+  color: #6D9E8B;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.dashboard-subtitle {
+  color: #999;
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Stats Cards */
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: #FFF6EB;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.stat-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.stat-content h3 {
+  color: #6D9E8B;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+}
+
+.stat-number {
+  color: #333;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Content Sections */
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.content-section {
+  background: #FFF6EB;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.content-section h2 {
+  color: #6D9E8B;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.3rem;
+  margin: 0 0 1.5rem 0;
+  font-weight: 600;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 2px solid #D19AAE;
+  background: transparent;
+  color: #D19AAE;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.action-btn:hover {
+  background: #D19AAE;
+  color: #FFF6EB;
+}
+
+.action-btn .icon {
+  font-size: 1.2rem;
+}
+
+.empty-state {
+  text-align: center;
+  color: #999;
+  font-family: 'Montserrat', sans-serif;
+  padding: 2rem;
+  font-style: italic;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'Montserrat', sans-serif;
+  color: #6D9E8B;
+  font-size: 1.2rem;
+}

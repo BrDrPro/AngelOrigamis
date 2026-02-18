@@ -8,8 +8,13 @@ function Header() {
   const location = useLocation();
 
   function handleEncomendar() {
-    navigate('/contact?form=encomenda');
-    window.scrollTo(0, 0);
+    if (location.pathname === '/contact') {
+      navigate('/contact?form=encomenda', { replace: true });
+      window.scrollTo(0, 0);
+    } else {
+      navigate('/contact?form=encomenda');
+      window.scrollTo(0, 0);
+    }
   }
 
   function handleNav(path) {
@@ -40,9 +45,7 @@ function Header() {
             <li><button onClick={() => handleNav('/cart')} className="nav-btn">Carrinho</button></li>
           </ul>
         </nav>
-        <div className="cta-button">
-          <button className="encomendar-btn" onClick={handleEncomendar}>Encomendar</button>
-        </div>
+        <button className="encomendar-btn" onClick={handleEncomendar}>Encomendar</button>
       </div>
     </header>
   );

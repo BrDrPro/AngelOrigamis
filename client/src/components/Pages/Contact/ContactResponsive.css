@@ -42,17 +42,21 @@
     padding: 0.5rem 1rem;
     margin-top: 0.7rem;
     border-radius: 4px;
-    width: 100%;
+    width: 280px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
   .contact-selects {
     flex-direction: column;
     gap: 0.5rem;
     margin-bottom: 1.2rem;
+    align-items: center;
   }
   .contact-select-btn {
     font-size: 0.95rem;
     padding: 0.5rem 1rem;
-    width: 100%;
+    width: 280px;
     box-sizing: border-box;
   }
   .faq-container {
@@ -85,12 +89,15 @@
     padding: 0.35rem 0.7rem;
     margin-top: 0.5rem;
     border-radius: 4px;
-    width: 100%;
+    width: 220px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
   .contact-select-btn {
     font-size: 0.85rem;
     padding: 0.4rem 0.7rem;
-    width: 100%;
+    width: 220px;
   }
   .faq-item {
     padding: 0.7rem;
