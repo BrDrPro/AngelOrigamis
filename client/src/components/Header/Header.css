@@ -9,7 +9,7 @@
 }
 
 .header-container {
-  max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 1rem 2rem;
   display: flex;
@@ -17,6 +17,7 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 1rem;
+  box-sizing: border-box;
 }
 
 .logo h1 {
@@ -96,6 +97,33 @@
 }
 
 .encomendar-btn:hover {
+  background: #6D9E8B;
+  color: #FFF6EB;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.login-btn {
+  background: #D19AAE;
+  color: #FFF6EB;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  transition: background 0.3s, color 0.3s;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.login-btn:hover {
   background: #6D9E8B;
   color: #FFF6EB;
 }

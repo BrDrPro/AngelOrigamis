@@ -25,17 +25,27 @@
     max-width: 120px;
   }
 
-  .encomendar-btn {
+  .header-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .encomendar-btn,
+  .login-btn {
     width: auto !important;
     max-width: 220px !important;
     min-width: 120px !important;
     font-size: 0.9rem !important;
     padding: 0.15rem 1.2rem !important;
-    background: var(--rosa-logo) !important;
-    color: var(--bege-logo) !important;
     border-radius: 4px !important;
     display: inline-block !important;
     box-sizing: border-box !important;
+  }
+
+  .encomendar-btn,
+  .login-btn {
+    background: var(--rosa-logo) !important;
+    color: var(--bege-logo) !important;
   }
 }
 

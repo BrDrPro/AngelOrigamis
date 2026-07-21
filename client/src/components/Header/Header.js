@@ -45,7 +45,10 @@ function Header() {
             <li><button onClick={() => handleNav('/cart')} className="nav-btn">Carrinho</button></li>
           </ul>
         </nav>
-        <button className="encomendar-btn" onClick={handleEncomendar}>Encomendar</button>
+        <div className="header-actions">
+          <button className="login-btn" onClick={() => handleNav('/admin/login')}>Login</button>
+          <button className="encomendar-btn" onClick={handleEncomendar}>Encomendar</button>
+        </div>
       </div>
     </header>
   );

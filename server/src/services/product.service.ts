@@ -14,6 +14,7 @@ export default class ProductService {
     description?: string; 
     price: number; 
     category: string;
+    subcategory?: string | null;
     measure: string;
     imageUrls: string[];
   }) {
@@ -25,6 +26,7 @@ export default class ProductService {
     description: string; 
     price: number; 
     category: string;
+    subcategory: string | null;
     measure: string;
     imageUrls: string[];
   }>) {
