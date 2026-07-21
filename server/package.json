@@ -6,6 +6,7 @@
   "scripts": {
     "start": "ts-node src/app.ts",
     "dev": "ts-node-dev src/app.ts",
+    "seed": "ts-node src/scripts/seedProducts.ts",
     "build": "tsc",
     "lint": "eslint . --ext .ts"
   },
@@ -15,6 +16,7 @@
     "dotenv": "^17.2.3",
     "express": "^4.17.1",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^2.1.1",
     "mysql2": "^2.3.3",
     "pg": "^8.16.3",
     "sequelize": "^6.6.5"
@@ -24,6 +26,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.1.0",
     "@types/node": "^24.6.2",
     "@types/sequelize": "^6.12.0",
     "@typescript-eslint/eslint-plugin": "^5.0.0",

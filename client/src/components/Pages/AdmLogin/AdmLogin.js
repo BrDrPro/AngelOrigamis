@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { apiFetch } from '../../../api/apiClient';
 import './AdmLogin.css';
 import './AdmLoginResponsive.css';
 
@@ -9,45 +10,61 @@ function AdmLogin() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const isMountedRef = useRef(true);
+  const abortRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+      if (abortRef.current) {
+        abortRef.current.abort();
+      }
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isMountedRef.current) return;
     setError('');
     setLoading(true);
 
     try {
-      const apiUrl = process.env.NODE_ENV === 'production' 
-        ? 'https://angelorigamis.com.br/api/auth/login'
-        : 'http://localhost:3001/api/auth/login';
+      if (abortRef.current) {
+        abortRef.current.abort();
+      }
+      const controller = new AbortController();
+      abortRef.current = controller;
 
-      const response = await fetch(apiUrl, {
+      const data = await apiFetch('/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+        body: { email, password },
+        signal: controller.signal,
       });
 
-      const data = await response.json();
+      // Salva o token no localStorage
+      localStorage.setItem('adminToken', data.token);
 
-      if (response.ok) {
-        // Salva o token no localStorage
-        localStorage.setItem('adminToken', data.token);
-        
-        // Limpa os campos de senha
+      // Limpa os campos de senha
+      if (isMountedRef.current) {
         setEmail('');
         setPassword('');
-        
-        // Redireciona para o painel
-        navigate('/admin/dashboard');
-      } else {
-        setError(data.message || 'Credenciais inválidas');
       }
+
+      // Redireciona para o painel
+      navigate('/admin/dashboard');
     } catch (err) {
-      setError('Erro ao conectar com o servidor');
+      if (err && err.name === 'AbortError') return;
+      if (isMountedRef.current) {
+        const message = err.status
+          ? err.data?.message || 'Credenciais inválidas'
+          : 'Erro ao conectar com o servidor';
+        setError(message);
+      }
       console.error('Erro no login:', err);
     } finally {
-      setLoading(false);
+      if (isMountedRef.current) {
+        setLoading(false);
+      }
     }
   };
 

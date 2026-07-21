@@ -13,10 +13,7 @@ function Footer() {
             <h3>Contato</h3>
             <address>
               <p>
-                <a
-                  href="mailto:amgoulart@hotmail.com"
-                  style={{ color: 'inherit', textDecoration: 'none' }}
-                >
+                <a href="mailto:amgoulart@hotmail.com">
                   <FaEnvelope /> Mail
                 </a>
               </p>
@@ -25,7 +22,6 @@ function Footer() {
                   href="https://wa.me/5531971842477"
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ color: 'inherit', textDecoration: 'none' }}
                 >
                   <FaWhatsapp /> Whatsapp
                 </a>
