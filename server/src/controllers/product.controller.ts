@@ -9,6 +9,9 @@ const sanitizeSegment = (value?: string) => {
 };
 
 const getClientProductsDir = () => {
+  if (process.env.PRODUCTS_UPLOAD_DIR) {
+    return process.env.PRODUCTS_UPLOAD_DIR;
+  }
   return path.resolve(__dirname, '../../..', 'client', 'public', 'Produtos');
 };
 
