@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { createTestimonial } from '../../../api/testimonials';
+import { createContactRequest } from '../../../api/contactRequests';
 import './Contact.css';
 import './ContactResponsive.css';
 
@@ -18,6 +20,8 @@ function Contact() {
   const [nomeRecado, setNomeRecado] = useState('');
   const [msgRecado, setMsgRecado] = useState('');
   const [recadoEnviado, setRecadoEnviado] = useState(false);
+  const [recadoErro, setRecadoErro] = useState('');
+  const [recadoEnviando, setRecadoEnviando] = useState(false);
 
   const location = useLocation();
 
@@ -49,24 +53,32 @@ function Contact() {
       `Detalhes: ${detalhesEncomenda}`
     );
     window.open(`https://wa.me/5531971842477?text=${texto}`, '_blank');
+
+    createContactRequest({
+      name: nomeEncomenda,
+      email: emailEncomenda,
+      productType: produtoEncomenda,
+      details: detalhesEncomenda,
+    }).catch((err) => console.error('Erro ao registrar solicitação:', err));
   }
 
-  function handleRecadoSubmit(e) {
+  async function handleRecadoSubmit(e) {
     e.preventDefault();
     if (!nomeRecado.trim() || !msgRecado.trim()) return;
-    const novoRecado = {
-      nome: nomeRecado.trim(),
-      mensagem: msgRecado.trim(),
-      data: new Date().toISOString()
-    };
-    // Salva no localStorage
-    const recados = JSON.parse(localStorage.getItem('recadosAngel') || '[]');
-    recados.unshift(novoRecado); // adiciona no início
-    localStorage.setItem('recadosAngel', JSON.stringify(recados));
-    setRecadoEnviado(true);
-    setNomeRecado('');
-    setMsgRecado('');
-    setTimeout(() => setRecadoEnviado(false), 2500);
+    setRecadoErro('');
+    setRecadoEnviando(true);
+    try {
+      await createTestimonial(nomeRecado.trim(), msgRecado.trim());
+      setRecadoEnviado(true);
+      setNomeRecado('');
+      setMsgRecado('');
+      setTimeout(() => setRecadoEnviado(false), 2500);
+    } catch (err) {
+      setRecadoErro('Não foi possível enviar seu recado. Tente novamente.');
+      console.error('Erro ao enviar recado:', err);
+    } finally {
+      setRecadoEnviando(false);
+    }
   }
 
   return (
@@ -132,10 +144,17 @@ function Contact() {
                   />
                   <div className="char-counter">{msgRecado.length}/120</div>
                 </div>
-                <button type="submit" className="submit-button">Enviar Recado</button>
+                <button type="submit" className="submit-button" disabled={recadoEnviando}>
+                  {recadoEnviando ? 'Enviando...' : 'Enviar Recado'}
+                </button>
                 {recadoEnviado && (
                   <div style={{ color: 'var(--verde-logo)', marginTop: 10, textAlign: 'center' }}>
-                    Recado enviado! Obrigado pelo carinho 💖
+                    Recado enviado! Ele aparecerá na página inicial após aprovação 💖
+                  </div>
+                )}
+                {recadoErro && (
+                  <div style={{ color: '#c41e3a', marginTop: 10, textAlign: 'center' }}>
+                    {recadoErro}
                   </div>
                 )}
               </form>

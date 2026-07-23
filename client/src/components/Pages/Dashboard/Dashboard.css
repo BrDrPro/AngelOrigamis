@@ -22,6 +22,14 @@
   border-bottom: 1px solid #e0e0e0;
 }
 
+.sidebar-header-link {
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: block;
+}
+
 .sidebar-logo {
   height: 60px;
   margin-bottom: 0.5rem;
@@ -53,6 +61,8 @@
   cursor: pointer;
   transition: background 0.3s, color 0.3s;
   text-align: left;
+  text-decoration: none;
+  box-sizing: border-box;
 }
 
 .nav-item:hover {
@@ -271,6 +281,22 @@
 
 .product-thumb-empty {
   background: #e0e0e0;
+}
+
+.product-table select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #D19AAE;
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: #333;
+  background: #fff;
+  cursor: pointer;
+}
+
+.unread-row {
+  font-weight: 700;
+  background: rgba(209, 154, 174, 0.08);
 }
 
 .product-actions {

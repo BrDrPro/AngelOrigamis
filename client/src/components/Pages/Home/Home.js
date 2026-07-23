@@ -4,6 +4,7 @@ import './Home.css';
 import './HomeResponsive.css'
 import { CartContext } from '../../CartContext/CartContext';
 import { fetchProducts } from '../../../api/products';
+import { fetchTestimonials } from '../../../api/testimonials';
 import axios from 'axios'; // Adicione se não estiver usando fetch
 
 function Home() {
@@ -76,13 +77,12 @@ function Home() {
     setTimeout(() => setAddedMsg(false), 2000); // mensagem desaparece após 2s
   }
 
-  // Carregar todos os recados do localStorage
   useEffect(() => {
-    const recadosSalvos = JSON.parse(localStorage.getItem('recadosAngel') || '[]');
-    setRecados(recadosSalvos);
+    fetchTestimonials()
+      .then(setRecados)
+      .catch(console.error);
   }, []);
 
-  // Sempre começar mostrando os 5 mais recentes
   useEffect(() => {
     if (recados.length > 5) {
       setRecadoStartIndex(recados.length - 5);
@@ -277,12 +277,12 @@ function Home() {
           <h2>O que nossos clientes dizem</h2>
           <div className="testimonial-container">
             {/* Carrossel de recados */}
-            {visibleRecados.map((recado, idx) => (
-              <div className="testimonial-card" key={recado.data + idx}>
+            {visibleRecados.map((recado) => (
+              <div className="testimonial-card" key={recado.id}>
                 <p className="recado-msg">
-                  "{recado.mensagem.length > 120 ? recado.mensagem.slice(0, 120) + '...' : recado.mensagem}"
+                  "{recado.message.length > 120 ? recado.message.slice(0, 120) + '...' : recado.message}"
                 </p>
-                <p className="recado-nome">- {recado.nome}</p>
+                <p className="recado-nome">- {recado.name}</p>
               </div>
             ))}
           </div>

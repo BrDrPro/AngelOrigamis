@@ -118,6 +118,51 @@
 .checkout-btn:hover:not(:disabled) {
   background: #128c7e;
 }
+.customer-info-form {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+.customer-info-form h2 {
+  font-family: 'Montserrat', sans-serif;
+  color: #6D9E8B;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  text-align: left;
+}
+.customer-info-row {
+  display: flex;
+  gap: 1rem;
+}
+.customer-info-row .form-group {
+  flex: 1;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+.form-group label {
+  color: #6D9E8B;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.form-group input {
+  padding: 0.6rem;
+  border: 2px solid #D19AAE;
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  transition: border-color 0.3s;
+}
+.form-group input:focus {
+  outline: none;
+  border-color: #6D9E8B;
+}
+
 .cart-actions {
   display: flex;
   gap: 1rem;
