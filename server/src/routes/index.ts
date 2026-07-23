@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import productRoutes from './product.routes';
-import clientRoutes from './client.routes';
+import newsletterSubscriberRoutes from './newsletterSubscriber.routes';
 import authRoutes from './auth.routes';
 import testimonialRoutes from './testimonial.routes';
 import contactRequestRoutes from './contactRequest.routes';
@@ -10,7 +10,7 @@ const router = Router();
 
 router.use('/auth', authRoutes);
 router.use('/products', productRoutes);
-router.use('/clients', clientRoutes);
+router.use('/newsletter', newsletterSubscriberRoutes);
 router.use('/testimonials', testimonialRoutes);
 router.use('/contact-requests', contactRequestRoutes);
 router.use('/orders', orderRoutes);

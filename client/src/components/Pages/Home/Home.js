@@ -5,7 +5,7 @@ import './HomeResponsive.css'
 import { CartContext } from '../../CartContext/CartContext';
 import { fetchProducts } from '../../../api/products';
 import { fetchTestimonials } from '../../../api/testimonials';
-import axios from 'axios'; // Adicione se não estiver usando fetch
+import { apiFetch } from '../../../api/apiClient';
 
 function Home() {
   // Estado para controlar o índice inicial visível no carrossel
@@ -120,7 +120,7 @@ function Home() {
   async function handleNewsletterSubmit(e) {
     e.preventDefault();
     try {
-    await axios.post('https://angelorigamis.com.br/api/clients', { email: newsletterEmail });
+      await apiFetch('/newsletter', { method: 'POST', body: { email: newsletterEmail } });
       setNewsletterMsg('Inscrição realizada com sucesso!');
       setNewsletterEmail('');
     } catch (err) {
