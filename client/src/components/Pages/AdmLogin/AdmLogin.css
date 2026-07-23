@@ -89,6 +89,25 @@
   cursor: not-allowed;
 }
 
+.back-to-site-button {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: #6D9E8B;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1.25rem;
+  text-align: center;
+  transition: color 0.3s;
+}
+
+.back-to-site-button:hover {
+  color: #D19AAE;
+}
+
 .error-message {
   background: #ffebee;
   color: #c62828;

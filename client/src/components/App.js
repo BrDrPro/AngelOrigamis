@@ -12,6 +12,11 @@ import Cart from './Pages/Cart/Cart';
 import Footer from './Footer/Footer';
 import AdmLogin from './Pages/AdmLogin/AdmLogin';
 import Dashboard from './Pages/Dashboard/Dashboard';
+import DashboardHome from './Pages/Dashboard/DashboardHome/DashboardHome';
+import DashboardProducts from './Pages/Dashboard/DashboardProducts/DashboardProducts';
+import DashboardOrders from './Pages/Dashboard/DashboardOrders/DashboardOrders';
+import DashboardMessages from './Pages/Dashboard/DashboardMessages/DashboardMessages';
+import DashboardSettings from './Pages/Dashboard/DashboardSettings/DashboardSettings';
 
 function Layout() {
     const location = useLocation();
@@ -28,7 +33,13 @@ function Layout() {
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/admin/login" element={<AdmLogin />} />
-                    <Route path="/admin/dashboard" element={<Dashboard />} />
+                    <Route path="/admin/dashboard" element={<Dashboard />}>
+                        <Route index element={<DashboardHome />} />
+                        <Route path="produtos" element={<DashboardProducts />} />
+                        <Route path="pedidos" element={<DashboardOrders />} />
+                        <Route path="mensagens" element={<DashboardMessages />} />
+                        <Route path="configuracoes" element={<DashboardSettings />} />
+                    </Route>
                 </Routes>
             </main>
             {!isAdminRoute && <Footer />}

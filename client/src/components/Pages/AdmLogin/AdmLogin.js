@@ -109,6 +109,14 @@ function AdmLogin() {
             {loading ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
+
+        <button
+          type="button"
+          className="back-to-site-button"
+          onClick={() => navigate('/')}
+        >
+          ← Voltar para o site
+        </button>
       </div>
     </div>
   );
