@@ -1,11 +1,13 @@
 import React, { useContext, useState } from 'react';
 import { CartContext } from '../../CartContext/CartContext';
+import { StoreSettingsContext } from '../../StoreSettingsContext/StoreSettingsContext';
 import { createOrder } from '../../../api/orders';
 import './Cart.css';
 import './CartResponsive.css';
 
 function Cart() {
   const { cart, removeFromCart, clearCart } = useContext(CartContext);
+  const { whatsappPhone } = useContext(StoreSettingsContext);
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [customerEmail, setCustomerEmail] = useState('');
@@ -26,18 +28,15 @@ function Cart() {
         customerEmail: customerEmail.trim(),
         items: cart.map((item) => ({
           productId: item.id,
-          name: item.name,
-          price: item.price,
           quantity: item.quantity
-        })),
-        total
+        }))
       });
     } catch (err) {
       console.error('Erro ao registrar pedido:', err);
       // Segue para o WhatsApp mesmo se o registro falhar, para não travar a compra do cliente.
     }
 
-    const phone = '5531971842477';
+    const phone = whatsappPhone;
     const msg = encodeURIComponent(
       `Olá! Gostaria de finalizar meu pedido:\n\n` +
       `*Nome:* ${customerName.trim()}\n` +

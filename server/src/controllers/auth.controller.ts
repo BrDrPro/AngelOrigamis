@@ -31,10 +31,54 @@ export default class AuthController {
       return res.json({
         id: admin.id,
         email: admin.email,
-        name: 'Administrador'
+        name: admin.name || 'Administrador'
       });
     } catch (error) {
       console.error('Erro na verificação:', error);
+      return res.status(500).json({ message: 'Erro interno do servidor' });
+    }
+  }
+
+  static async changePassword(req: Request, res: Response) {
+    try {
+      const admin = (req as any).admin;
+      const { currentPassword, newPassword } = req.body;
+
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({ message: 'Senha atual e nova senha são obrigatórias' });
+      }
+
+      if (newPassword.length < 6) {
+        return res.status(400).json({ message: 'A nova senha deve ter pelo menos 6 caracteres' });
+      }
+
+      const success = await AuthService.changePassword(admin.id, currentPassword, newPassword);
+
+      if (!success) {
+        return res.status(401).json({ message: 'Senha atual incorreta' });
+      }
+
+      return res.json({ message: 'Senha atualizada com sucesso' });
+    } catch (error) {
+      console.error('Erro ao trocar senha:', error);
+      return res.status(500).json({ message: 'Erro interno do servidor' });
+    }
+  }
+
+  static async updateName(req: Request, res: Response) {
+    try {
+      const admin = (req as any).admin;
+      const { name } = req.body;
+
+      if (!name || !name.trim()) {
+        return res.status(400).json({ message: 'Nome é obrigatório' });
+      }
+
+      const updated = await AuthService.updateName(admin.id, name.trim());
+
+      return res.json({ id: updated!.id, email: updated!.email, name: updated!.name });
+    } catch (error) {
+      console.error('Erro ao atualizar nome:', error);
       return res.status(500).json({ message: 'Erro interno do servidor' });
     }
   }

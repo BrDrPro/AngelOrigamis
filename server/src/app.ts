@@ -7,6 +7,11 @@ import { sequelize } from './models';
 
 const app = express();
 
+// Necessário em produção: o Nginx fica na frente do Node, então o Express
+// precisa ler o IP real do cliente via X-Forwarded-For (senão o rate limit
+// do login trataria todo mundo como se viesse do mesmo IP do proxy).
+app.set('trust proxy', 1);
+
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',

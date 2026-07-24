@@ -25,7 +25,6 @@ function Services() {
 	const [openCategories, setOpenCategories] = useState({});
 	const [expandedProduct, setExpandedProduct] = useState(null);
 	const [modalImageIndex, setModalImageIndex] = useState(0);
-	const [carouselPaused, setCarouselPaused] = useState(false);
 	const [products, setProducts] = useState([]);
 	const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -103,7 +102,6 @@ function Services() {
 					.map(([categoryName, products]) => {
 						const index = carouselIndex[categoryName] || 0;
 						const itemsPerView = 3;
-						const maxIndex = Math.max(0, products.length - itemsPerView);
 
 						// Use isMobile para decidir o que renderizar
 						const visibleProducts = isMobile
@@ -161,7 +159,6 @@ function Services() {
 															className="product-card"
 															onClick={() => {
 																setExpandedProduct(product);
-																setCarouselPaused(true);
 																setModalImageIndex(0);
 															}}
 															style={{ cursor: 'pointer' }}
@@ -233,7 +230,6 @@ function Services() {
 					className="modal-overlay"
 					onClick={() => {
 						setExpandedProduct(null);
-						setCarouselPaused(false);
 						setModalImageIndex(0);
 					}}
 				>
@@ -309,7 +305,6 @@ function Services() {
 							className="close-btn"
 							onClick={() => {
 								setExpandedProduct(null);
-								setCarouselPaused(false);
 								setModalImageIndex(0);
 							}}
 						>
