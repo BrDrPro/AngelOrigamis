@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import { createTestimonial } from '../../../api/testimonials';
 import { createContactRequest } from '../../../api/contactRequests';
+import { StoreSettingsContext } from '../../StoreSettingsContext/StoreSettingsContext';
 import './Contact.css';
 import './ContactResponsive.css';
 
 function Contact() {
+  const { whatsappPhone } = useContext(StoreSettingsContext);
   const [selectedForm, setSelectedForm] = useState('recado');
   const [nomeZap, setNomeZap] = useState('');
   const [msgZap, setMsgZap] = useState('');
@@ -40,7 +42,7 @@ function Contact() {
     const texto = encodeURIComponent(
       `Olá, meu nome é ${nome}.\n${mensagem}`
     );
-    window.open(`https://wa.me/5531971842477?text=${texto}`, '_blank');
+    window.open(`https://wa.me/${whatsappPhone}?text=${texto}`, '_blank');
   }
 
   function handleEncomendaWhatsApp(e) {
@@ -52,7 +54,7 @@ function Contact() {
       `Produto: ${produtoEncomenda}\n` +
       `Detalhes: ${detalhesEncomenda}`
     );
-    window.open(`https://wa.me/5531971842477?text=${texto}`, '_blank');
+    window.open(`https://wa.me/${whatsappPhone}?text=${texto}`, '_blank');
 
     createContactRequest({
       name: nomeEncomenda,

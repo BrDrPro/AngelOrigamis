@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { CartProvider } from './CartContext/CartContext';
+import { StoreSettingsProvider } from './StoreSettingsContext/StoreSettingsContext';
 import '../styles/App.css';
 import '../styles/global.css';
 import Header from './Header/Header';
@@ -49,11 +50,13 @@ function Layout() {
 
 function App() {
     return (
-        <CartProvider>
-            <Router>
-                <Layout />
-            </Router>
-        </CartProvider>
+        <StoreSettingsProvider>
+            <CartProvider>
+                <Router>
+                    <Layout />
+                </Router>
+            </CartProvider>
+        </StoreSettingsProvider>
     );
 }
 

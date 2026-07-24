@@ -9,6 +9,7 @@ import {
   markContactRequestRead,
   deleteContactRequest
 } from '../../../../api/contactRequests';
+import Pagination, { usePagination } from '../Pagination/Pagination';
 
 function DashboardMessages() {
   const [testimonials, setTestimonials] = useState([]);
@@ -19,6 +20,8 @@ function DashboardMessages() {
   const [contactRequestsLoading, setContactRequestsLoading] = useState(true);
   const [contactRequestsError, setContactRequestsError] = useState('');
   const [contactRequestActionId, setContactRequestActionId] = useState(null);
+  const { page: testimonialsPage, setPage: setTestimonialsPage, totalPages: testimonialsTotalPages, pageItems: pagedTestimonials } = usePagination(testimonials);
+  const { page: requestsPage, setPage: setRequestsPage, totalPages: requestsTotalPages, pageItems: pagedRequests } = usePagination(contactRequests);
 
   const loadTestimonials = useCallback(async () => {
     setTestimonialsLoading(true);
@@ -145,7 +148,7 @@ function DashboardMessages() {
                   </tr>
                 </thead>
                 <tbody>
-                  {testimonials.map((t) => (
+                  {pagedTestimonials.map((t) => (
                     <tr key={t.id}>
                       <td>{t.name}</td>
                       <td>{t.message}</td>
@@ -172,6 +175,7 @@ function DashboardMessages() {
                   ))}
                 </tbody>
               </table>
+              <Pagination page={testimonialsPage} totalPages={testimonialsTotalPages} onChange={setTestimonialsPage} />
             </div>
           )}
         </section>
@@ -197,7 +201,7 @@ function DashboardMessages() {
                   </tr>
                 </thead>
                 <tbody>
-                  {contactRequests.map((r) => (
+                  {pagedRequests.map((r) => (
                     <tr key={r.id} className={r.read ? '' : 'unread-row'}>
                       <td>{r.name}</td>
                       <td>{r.email}</td>
@@ -225,6 +229,7 @@ function DashboardMessages() {
                   ))}
                 </tbody>
               </table>
+              <Pagination page={requestsPage} totalPages={requestsTotalPages} onChange={setRequestsPage} />
             </div>
           )}
         </section>

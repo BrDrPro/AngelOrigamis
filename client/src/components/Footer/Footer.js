@@ -1,25 +1,28 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './Footer.css';
 import './FooterResponsive.css';
-import { FaWhatsapp, FaInstagram, FaFacebook, FaPinterest, FaEnvelope } from 'react-icons/fa';
+import { FaWhatsapp, FaInstagram, FaFacebook, FaEnvelope } from 'react-icons/fa';
+import { StoreSettingsContext } from '../StoreSettingsContext/StoreSettingsContext';
 
 function Footer() {
+  const { whatsappPhone, contactEmail, hoursWeekdays, hoursSaturday, hoursSunday } = useContext(StoreSettingsContext);
+
   return (
     <footer className="site-footer">
       <div className="footer-container">
         <div className="footer-columns">
-          
+
           <div className="footer-column">
             <h3>Contato</h3>
             <address>
               <p>
-                <a href="mailto:amgoulart@hotmail.com">
+                <a href={`mailto:${contactEmail}`}>
                   <FaEnvelope /> Mail
                 </a>
               </p>
               <p>
                 <a
-                  href="https://wa.me/5531971842477"
+                  href={`https://wa.me/${whatsappPhone}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -28,7 +31,7 @@ function Footer() {
               </p>
             </address>
           </div>
-          
+
           <div className="footer-column">
             <h3>Redes sociais</h3>
             <div className="social-links">
@@ -43,12 +46,12 @@ function Footer() {
 
           <div className="footer-column">
             <h3>Horário de Funcionamento</h3>
-            <p>Seg a Sex: 9h - 18h</p>
-            <p>Sábado: 10h - 14h</p>
-            <p>Domingo: Fechado</p>
+            <p>{hoursWeekdays}</p>
+            <p>{hoursSaturday}</p>
+            <p>{hoursSunday}</p>
           </div>
         </div>
-        
+
         <div className="footer-bottom">
           <p className="copyright">
             &copy; {new Date().getFullYear()} Angel Origamis & Artesanatos

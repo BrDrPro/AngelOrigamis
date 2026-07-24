@@ -25,4 +25,24 @@ export default class AuthService {
       return null;
     }
   }
+
+  static async changePassword(adminId: number, currentPassword: string, newPassword: string) {
+    const admin = await Admin.findByPk(adminId);
+    if (!admin) return false;
+
+    const valid = await bcrypt.compare(currentPassword, admin.password);
+    if (!valid) return false;
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+    await admin.update({ password: hashed });
+    return true;
+  }
+
+  static async updateName(adminId: number, name: string) {
+    const admin = await Admin.findByPk(adminId);
+    if (!admin) return null;
+
+    await admin.update({ name });
+    return admin;
+  }
 }

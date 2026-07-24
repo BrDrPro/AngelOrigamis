@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import ProductForm from '../ProductForm/ProductForm';
+import Pagination, { usePagination } from '../Pagination/Pagination';
 import { fetchProducts, deleteProduct } from '../../../../api/products';
 
 function DashboardProducts() {
@@ -11,6 +12,7 @@ function DashboardProducts() {
   const [productsLoading, setProductsLoading] = useState(true);
   const [productsError, setProductsError] = useState('');
   const [deletingId, setDeletingId] = useState(null);
+  const { page, setPage, totalPages, pageItems: pagedProducts } = usePagination(products);
 
   const loadProducts = useCallback(async () => {
     setProductsLoading(true);
@@ -100,7 +102,7 @@ function DashboardProducts() {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map((product) => (
+                  {pagedProducts.map((product) => (
                     <tr key={product.id}>
                       <td>
                         {product.imageUrls && product.imageUrls[0] ? (
@@ -140,6 +142,7 @@ function DashboardProducts() {
                   ))}
                 </tbody>
               </table>
+              <Pagination page={page} totalPages={totalPages} onChange={setPage} />
             </div>
           )}
         </section>

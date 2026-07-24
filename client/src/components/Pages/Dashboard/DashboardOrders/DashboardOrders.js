@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { fetchOrders, updateOrderStatus, deleteOrder } from '../../../../api/orders';
+import Pagination, { usePagination } from '../Pagination/Pagination';
 
 const STATUS_LABELS = {
   novo: 'Novo',
@@ -13,6 +14,7 @@ function DashboardOrders() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [actionId, setActionId] = useState(null);
+  const { page, setPage, totalPages, pageItems: pagedOrders } = usePagination(orders);
 
   const loadOrders = useCallback(async () => {
     setLoading(true);
@@ -92,7 +94,7 @@ function DashboardOrders() {
                   </tr>
                 </thead>
                 <tbody>
-                  {orders.map((order) => (
+                  {pagedOrders.map((order) => (
                     <tr key={order.id} className={order.status === 'novo' ? 'unread-row' : ''}>
                       <td>{order.customerName}</td>
                       <td>
@@ -137,6 +139,7 @@ function DashboardOrders() {
                   ))}
                 </tbody>
               </table>
+              <Pagination page={page} totalPages={totalPages} onChange={setPage} />
             </div>
           )}
         </section>

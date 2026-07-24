@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 import './HomeResponsive.css'
@@ -36,11 +36,11 @@ function Home() {
   const maxIndex = Math.max(0, featuredProducts.length - itemsPerView);
 
   // Função para avançar para os próximos itens
-  const nextSlide = () => {
-    setStartIndex(prevIndex => 
+  const nextSlide = useCallback(() => {
+    setStartIndex(prevIndex =>
       prevIndex >= maxIndex ? 0 : prevIndex + 1
     );
-  };
+  }, [maxIndex]);
 
   // Função para voltar para os itens anteriores
   const prevSlide = () => {
@@ -56,7 +56,7 @@ function Home() {
       nextSlide();
     }, 5000);
     return () => clearInterval(interval);
-  }, [carouselPaused, featuredProducts.length]);
+  }, [carouselPaused, nextSlide]);
 
   // Calcular quais produtos estão visíveis no momento
   const visibleProducts = [];

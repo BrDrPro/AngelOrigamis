@@ -4,6 +4,7 @@ import { NewsletterSubscriber } from './newsletterSubscriber.model';
 import { Testimonial } from './testimonial.model';
 import { ContactRequest } from './contactRequest.model';
 import { Order } from './order.model';
+import { StoreSettings } from './storeSettings.model';
 
 const models = {
   Product,
@@ -11,6 +12,7 @@ const models = {
   Testimonial,
   ContactRequest,
   Order,
+  StoreSettings,
 };
 
-export { sequelize, models, Product, NewsletterSubscriber, Testimonial, ContactRequest, Order };
+export { sequelize, models, Product, NewsletterSubscriber, Testimonial, ContactRequest, Order, StoreSettings };

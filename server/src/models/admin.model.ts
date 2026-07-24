@@ -5,6 +5,7 @@ export interface AdminAttributes {
   id?: number;
   email: string;
   password: string;
+  name?: string | null;
 }
 
 interface AdminCreationAttributes extends Optional<AdminAttributes, 'id'> {}
@@ -13,6 +14,7 @@ export class Admin extends Model<AdminAttributes, AdminCreationAttributes> imple
   public id!: number;
   public email!: string;
   public password!: string;
+  public name!: string | null;
 }
 
 Admin.init(
@@ -33,6 +35,10 @@ Admin.init(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   },
   {
