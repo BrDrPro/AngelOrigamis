@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import './ProductForm.css';
 import { createProduct, updateProduct } from '../../../../api/products';
+import { fetchCategories } from '../../../../api/categories';
+import SearchableSelect from './SearchableSelect';
 
 function ProductForm({ product, onClose, onSuccess }) {
   const isEditMode = Boolean(product);
@@ -12,53 +14,18 @@ function ProductForm({ product, onClose, onSuccess }) {
     category: '',
     subcategory: '',
     measure: '',
-    categoryFolder: '',
-    subcategoryFolder: ''
   });
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [categoryFolderDirty, setCategoryFolderDirty] = useState(false);
-  const [subcategoryFolderDirty, setSubcategoryFolderDirty] = useState(false);
+  const [categories, setCategories] = useState([]);
 
-  const categories = [
-    'Móbiles',
-    'Mandalas',
-    'Kussudamas',
-    'Colares de Mesa',
-    'Escapulários de Porta',
-    'Adornos de Porta e/ou Berço',
-    'Quadros de Origami',
-    'Filtros dos Sonhos',
-    'Material de Escritório',
-    'Cadeira de Praia em Fio Náutico',
-    'Decoração de Natal'
-  ];
-
-  const categoryFolderMap = useMemo(() => ({
-    'Móbiles': 'Mobilis',
-    'Mandalas': 'Mandalas',
-    'Kussudamas': 'Kussudamas',
-    'Colares de Mesa': 'ColaresdeMesa',
-    'Escapulários de Porta': 'EscapuláriodePorta',
-    'Adornos de Porta e/ou Berço': 'AdornosdeBerçoePorta',
-    'Quadros de Origami': 'Quadros',
-    'Filtros dos Sonhos': 'FiltrodosSonhos',
-    'Material de Escritório': 'MaterialEscritório',
-    'Cadeira de Praia em Fio Náutico': 'CadeirasdePraia',
-    'Decoração de Natal': 'Natal'
-  }), []);
-
-  const normalizeFolder = (value) => {
-    if (!value) return '';
-    return value
-      .normalize('NFD')
-      .replace(/\p{Diacritic}/gu, '')
-      .replace(/\s+/g, '')
-      .replace(/[\\/]/g, '')
-      .trim();
-  };
+  useEffect(() => {
+    fetchCategories()
+      .then(setCategories)
+      .catch((err) => console.error('Erro ao buscar categorias:', err));
+  }, []);
 
   useEffect(() => {
     if (product) {
@@ -69,11 +36,18 @@ function ProductForm({ product, onClose, onSuccess }) {
         category: product.category || '',
         subcategory: product.subcategory || '',
         measure: product.measure || '',
-        categoryFolder: categoryFolderMap[product.category] || normalizeFolder(product.category) || '',
-        subcategoryFolder: normalizeFolder(product.subcategory) || ''
       });
     }
-  }, [product, categoryFolderMap]);
+  }, [product]);
+
+  const categoryNames = useMemo(() => categories.map((c) => c.name), [categories]);
+
+  const subcategoryNames = useMemo(() => {
+    const match = categories.find(
+      (c) => c.name.toLowerCase() === formData.category.trim().toLowerCase()
+    );
+    return match ? match.subcategories.map((s) => s.name) : [];
+  }, [categories, formData.category]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -81,22 +55,20 @@ function ProductForm({ product, onClose, onSuccess }) {
       ...prev,
       [name]: value
     }));
+  };
 
-    if (name === 'categoryFolder') {
-      setCategoryFolderDirty(true);
-    }
+  const handleCategorySelect = (value) => {
+    setFormData((prev) => ({
+      ...prev,
+      category: value,
+      // Uma categoria diferente pode não ter a mesma subcategoria - evita
+      // salvar uma combinação que não faz sentido.
+      subcategory: value === prev.category ? prev.subcategory : ''
+    }));
+  };
 
-    if (name === 'subcategoryFolder') {
-      setSubcategoryFolderDirty(true);
-    }
-
-    if (name === 'category') {
-      setCategoryFolderDirty(false);
-    }
-
-    if (name === 'subcategory') {
-      setSubcategoryFolderDirty(false);
-    }
+  const handleSubcategorySelect = (value) => {
+    setFormData((prev) => ({ ...prev, subcategory: value }));
   };
 
   const handleFilesChange = (e) => {
@@ -112,26 +84,6 @@ function ProductForm({ product, onClose, onSuccess }) {
       previews.forEach((url) => URL.revokeObjectURL(url));
     };
   }, [images]);
-
-  useEffect(() => {
-    if (formData.category && !categoryFolderDirty) {
-      const suggested = categoryFolderMap[formData.category] || normalizeFolder(formData.category);
-      setFormData((prev) => ({
-        ...prev,
-        categoryFolder: suggested
-      }));
-    }
-  }, [formData.category, categoryFolderDirty, categoryFolderMap]);
-
-  useEffect(() => {
-    if (formData.subcategory && !subcategoryFolderDirty) {
-      const suggested = normalizeFolder(formData.subcategory);
-      setFormData((prev) => ({
-        ...prev,
-        subcategoryFolder: suggested
-      }));
-    }
-  }, [formData.subcategory, subcategoryFolderDirty]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -151,15 +103,19 @@ function ProductForm({ product, onClose, onSuccess }) {
         return;
       }
 
+      if (!formData.category.trim()) {
+        setError('A categoria é obrigatória.');
+        setLoading(false);
+        return;
+      }
+
       const payload = new FormData();
       payload.append('name', formData.name);
       payload.append('description', formData.description);
       payload.append('price', String(parseFloat(formData.price)));
-      payload.append('category', formData.category);
-      payload.append('subcategory', formData.subcategory);
+      payload.append('category', formData.category.trim());
+      payload.append('subcategory', formData.subcategory.trim());
       payload.append('measure', formData.measure);
-      payload.append('categoryFolder', formData.categoryFolder);
-      payload.append('subcategoryFolder', formData.subcategoryFolder);
       images.forEach((file) => payload.append('images', file));
 
       if (isEditMode) {
@@ -205,31 +161,29 @@ function ProductForm({ product, onClose, onSuccess }) {
 
             <div className="form-group">
               <label htmlFor="category">Categoria *</label>
-              <select
+              <SearchableSelect
                 id="category"
-                name="category"
                 value={formData.category}
-                onChange={handleChange}
+                onChange={handleCategorySelect}
+                options={categoryNames}
+                placeholder="Digite ou selecione uma categoria"
+                entityLabel="Categoria"
                 required
-              >
-                <option value="">Selecione uma categoria</option>
-                {categories.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
+              />
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="subcategory">Subcategoria</label>
-              <input
-                type="text"
+              <SearchableSelect
                 id="subcategory"
-                name="subcategory"
                 value={formData.subcategory}
-                onChange={handleChange}
-                placeholder="Ex: Margaridas"
+                onChange={handleSubcategorySelect}
+                options={subcategoryNames}
+                placeholder="Opcional - digite ou selecione"
+                entityLabel="Subcategoria"
+                disabled={!formData.category.trim()}
               />
             </div>
 
@@ -246,50 +200,19 @@ function ProductForm({ product, onClose, onSuccess }) {
             </div>
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="price">Preço (R$) *</label>
-              <input
-                type="number"
-                id="price"
-                name="price"
-                value={formData.price}
-                onChange={handleChange}
-                required
-                step="0.01"
-                min="0"
-                placeholder="0.00"
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="categoryFolder">Pasta da Categoria *</label>
-              <input
-                type="text"
-                id="categoryFolder"
-                name="categoryFolder"
-                value={formData.categoryFolder}
-                onChange={handleChange}
-                required
-                placeholder="Ex: Mobilis"
-              />
-              <small>Use o nome exato da pasta em public/Produtos.</small>
-            </div>
-          </div>
-
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="subcategoryFolder">Pasta da Subcategoria</label>
-              <input
-                type="text"
-                id="subcategoryFolder"
-                name="subcategoryFolder"
-                value={formData.subcategoryFolder}
-                onChange={handleChange}
-                placeholder="Ex: Margaridas"
-              />
-              <small>Opcional. Preencha apenas se existir subpasta.</small>
-            </div>
+          <div className="form-group">
+            <label htmlFor="price">Preço (R$) *</label>
+            <input
+              type="number"
+              id="price"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              required
+              step="0.01"
+              min="0"
+              placeholder="0.00"
+            />
           </div>
 
           <div className="form-group">

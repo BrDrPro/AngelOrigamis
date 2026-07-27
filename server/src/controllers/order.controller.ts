@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { Order, Product } from '../models';
-import EmailService from '../services/email.service';
 
 const VALID_STATUSES = ['novo', 'em_andamento', 'concluido', 'cancelado'];
 
@@ -65,12 +64,6 @@ export default class OrderController {
       });
 
       res.status(201).json(order);
-
-      const itemsList = resolvedItems.map((item) => `- ${item.quantity}x ${item.name}`).join('\n');
-      EmailService.notifyAdmin(
-        'Novo pedido recebido - Angel Origamis',
-        `Cliente: ${customerName}\nTelefone: ${customerPhone}\nE-mail: ${customerEmail}\n\nItens:\n${itemsList}\n\nTotal: R$ ${total.toFixed(2)}`
-      );
     } catch (error) {
       console.error('Erro ao criar pedido:', error);
       res.status(500).json({ message: 'Erro ao criar pedido' });

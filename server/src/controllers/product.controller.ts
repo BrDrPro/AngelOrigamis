@@ -2,11 +2,7 @@ import { Request, Response } from 'express';
 import path from 'path';
 import fs from 'fs/promises';
 import ProductService from '../services/product.service';
-
-const sanitizeSegment = (value?: string) => {
-  if (!value) return '';
-  return value.replace(/[\\/]/g, '').replace(/\.\./g, '').trim();
-};
+import CategoryService from '../services/category.service';
 
 const getClientProductsDir = () => {
   if (process.env.PRODUCTS_UPLOAD_DIR) {
@@ -37,6 +33,16 @@ const deleteImageFiles = async (imageUrls?: string[] | null) => {
 };
 
 export default class ProductController {
+  static async getVisibleProducts(req: Request, res: Response) {
+    try {
+      const products = await ProductService.getVisible();
+      res.json(products);
+    } catch (error) {
+      console.error('Erro ao buscar produtos:', error);
+      res.status(500).json({ message: 'Erro ao buscar produtos' });
+    }
+  }
+
   static async getAllProducts(req: Request, res: Response) {
     try {
       const products = await ProductService.getAll();
@@ -44,6 +50,27 @@ export default class ProductController {
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
       res.status(500).json({ message: 'Erro ao buscar produtos' });
+    }
+  }
+
+  static async setVisibility(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { visible } = req.body;
+
+      if (typeof visible !== 'boolean') {
+        return res.status(400).json({ message: 'O campo visible deve ser true ou false' });
+      }
+
+      const product = await ProductService.setVisibility(Number(id), visible);
+      if (!product) {
+        return res.status(404).json({ message: 'Produto não encontrado' });
+      }
+
+      res.json(product);
+    } catch (error) {
+      console.error('Erro ao atualizar visibilidade do produto:', error);
+      res.status(500).json({ message: 'Erro ao atualizar visibilidade do produto' });
     }
   }
 
@@ -65,26 +92,30 @@ export default class ProductController {
 
   static async createProduct(req: Request, res: Response) {
     try {
-      const { name, description, price, category, subcategory, measure, imageUrls, categoryFolder, subcategoryFolder } = req.body;
+      const { name, description, price, category, subcategory, measure, imageUrls } = req.body;
       const files = (req as { files?: UploadedFile[] }).files ?? [];
-      
+
       if (!name || !price || !category) {
         return res.status(400).json({ message: 'Nome, preço e categoria são obrigatórios' });
       }
 
+      // Busca (ou cria, se for novo) a categoria/subcategoria - a pasta de imagens
+      // vem sempre do nome de pasta salvo nesses registros, nunca de um campo
+      // digitado à mão no formulário.
+      const categoryRecord = await CategoryService.findOrCreateCategory(category);
+      const subcategoryRecord = subcategory
+        ? await CategoryService.findOrCreateSubcategory(categoryRecord.get('id') as number, subcategory)
+        : null;
+
       let uploadedImageUrls: string[] = [];
       if (files.length > 0) {
-        const safeCategoryFolder = sanitizeSegment(categoryFolder || category);
-        const safeSubcategoryFolder = sanitizeSegment(subcategoryFolder || subcategory || '');
-
-        if (!safeCategoryFolder) {
-          return res.status(400).json({ message: 'Categoria da pasta é obrigatória para upload de imagens' });
-        }
+        const categoryFolder = categoryRecord.get('folderName') as string;
+        const subcategoryFolder = subcategoryRecord ? (subcategoryRecord.get('folderName') as string) : '';
 
         const baseDir = getClientProductsDir();
-        const relativeDir = safeSubcategoryFolder
-          ? path.join(safeCategoryFolder, safeSubcategoryFolder)
-          : safeCategoryFolder;
+        const relativeDir = subcategoryFolder
+          ? path.join(categoryFolder, subcategoryFolder)
+          : categoryFolder;
         const destDir = path.join(baseDir, relativeDir);
 
         await fs.mkdir(destDir, { recursive: true });
@@ -114,17 +145,17 @@ export default class ProductController {
           normalizedImageUrls = imageUrls;
         }
       }
-      
-      const product = await ProductService.create({ 
-        name, 
-        description, 
-        price: Number(price), 
-        category,
-        subcategory: subcategory || null,
-        measure: measure || 'un', 
-        imageUrls: normalizedImageUrls 
+
+      const product = await ProductService.create({
+        name,
+        description,
+        price: Number(price),
+        category: categoryRecord.get('name') as string,
+        subcategory: subcategoryRecord ? (subcategoryRecord.get('name') as string) : null,
+        measure: measure || 'un',
+        imageUrls: normalizedImageUrls
       });
-      
+
       res.status(201).json(product);
     } catch (error) {
       console.error('Erro ao criar produto:', error);
@@ -135,7 +166,7 @@ export default class ProductController {
   static async updateProduct(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { name, description, price, category, subcategory, measure, categoryFolder, subcategoryFolder } = req.body;
+      const { name, description, price, category, subcategory, measure } = req.body;
       const files = (req as { files?: UploadedFile[] }).files ?? [];
 
       const existingProduct = await ProductService.getById(Number(id));
@@ -147,27 +178,28 @@ export default class ProductController {
         return res.status(400).json({ message: 'Nome, preço e categoria são obrigatórios' });
       }
 
+      const categoryRecord = await CategoryService.findOrCreateCategory(category);
+      const subcategoryRecord = subcategory
+        ? await CategoryService.findOrCreateSubcategory(categoryRecord.get('id') as number, subcategory)
+        : null;
+
       const updateData: Record<string, unknown> = {
         name,
         description,
         price: Number(price),
-        category,
-        subcategory: subcategory || null,
+        category: categoryRecord.get('name') as string,
+        subcategory: subcategoryRecord ? (subcategoryRecord.get('name') as string) : null,
         measure: measure || 'un',
       };
 
       if (files.length > 0) {
-        const safeCategoryFolder = sanitizeSegment(categoryFolder || category);
-        const safeSubcategoryFolder = sanitizeSegment(subcategoryFolder || subcategory || '');
-
-        if (!safeCategoryFolder) {
-          return res.status(400).json({ message: 'Categoria da pasta é obrigatória para upload de imagens' });
-        }
+        const categoryFolder = categoryRecord.get('folderName') as string;
+        const subcategoryFolder = subcategoryRecord ? (subcategoryRecord.get('folderName') as string) : '';
 
         const baseDir = getClientProductsDir();
-        const relativeDir = safeSubcategoryFolder
-          ? path.join(safeCategoryFolder, safeSubcategoryFolder)
-          : safeCategoryFolder;
+        const relativeDir = subcategoryFolder
+          ? path.join(categoryFolder, subcategoryFolder)
+          : categoryFolder;
         const destDir = path.join(baseDir, relativeDir);
 
         await fs.mkdir(destDir, { recursive: true });
