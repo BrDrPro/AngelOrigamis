@@ -30,4 +30,9 @@ export const Product = sequelize.define('Product', {
     type: DataTypes.JSON,
     allowNull: false,
   },
+  visible: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: true,
+  },
 });

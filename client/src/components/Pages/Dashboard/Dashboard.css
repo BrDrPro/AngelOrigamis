@@ -389,6 +389,18 @@
   background: rgba(209, 154, 174, 0.08);
 }
 
+.hidden-row {
+  opacity: 0.55;
+  font-style: italic;
+}
+
+.section-hint {
+  color: #999;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  margin: -0.5rem 0 1rem 0;
+}
+
 .product-actions {
   display: flex;
   gap: 0.5rem;

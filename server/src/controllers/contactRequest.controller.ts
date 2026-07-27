@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { ContactRequest } from '../models';
-import EmailService from '../services/email.service';
 
 export default class ContactRequestController {
   static async getAll(req: Request, res: Response) {
@@ -32,11 +31,6 @@ export default class ContactRequestController {
       });
 
       res.status(201).json(request);
-
-      EmailService.notifyAdmin(
-        'Nova solicitação de orçamento - Angel Origamis',
-        `Nome: ${name}\nE-mail: ${email}\nProduto: ${productType}\nDetalhes: ${details}`
-      );
     } catch (error) {
       console.error('Erro ao criar mensagem:', error);
       res.status(500).json({ message: 'Erro ao criar mensagem' });

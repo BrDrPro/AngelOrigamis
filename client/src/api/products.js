@@ -4,6 +4,14 @@ export async function fetchProducts() {
   return apiFetch('/products');
 }
 
+export async function fetchAllProducts() {
+  return apiFetch('/products/all', { auth: true });
+}
+
+export async function updateProductVisibility(id, visible) {
+  return apiFetch(`/products/${id}/visibility`, { method: 'PATCH', body: { visible }, auth: true });
+}
+
 export async function createProduct(formData) {
   return apiFetch('/products', { method: 'POST', body: formData, isFormData: true, auth: true });
 }
