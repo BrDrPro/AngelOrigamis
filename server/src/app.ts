@@ -1,11 +1,16 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import routes from './routes/index';
 import authRoutes from './routes/auth.routes';
 import { sequelize } from './models';
 
 const app = express();
+
+// API só devolve JSON (as imagens de produto são servidas direto pelo Nginx,
+// não pelo Express), então o CSP padrão do helmet é seguro aqui.
+app.use(helmet());
 
 // Necessário em produção: o Nginx fica na frente do Node, então o Express
 // precisa ler o IP real do cliente via X-Forwarded-For (senão o rate limit

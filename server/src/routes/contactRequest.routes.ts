@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import ContactRequestController from '../controllers/contactRequest.controller';
 import { authMiddleware } from '../middlewares/auth.middleware';
+import { publicFormRateLimiter } from '../middlewares/rateLimit.middleware';
 
 const router = Router();
 
 // Rota pública
-router.post('/', ContactRequestController.create);
+router.post('/', publicFormRateLimiter, ContactRequestController.create);
 
 // Rotas protegidas (só admin autenticado)
 router.get('/', authMiddleware, ContactRequestController.getAll);

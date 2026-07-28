@@ -786,10 +786,17 @@ async function seed() {
 
   await Product.bulkCreate(products);
 
-  const hashedPassword = await bcrypt.hash('45221700', 10);
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (!adminEmail || !adminPassword) {
+    throw new Error('Defina ADMIN_EMAIL e ADMIN_PASSWORD no .env antes de rodar esse seed.');
+  }
+
+  const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
   await Admin.create({
-    email: 'amgoulart@hotmail.com',
+    email: adminEmail,
     password: hashedPassword
   });
 

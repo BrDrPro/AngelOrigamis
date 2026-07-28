@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { Admin } from '../models/admin.model';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'change-this-secret-in-production';
+import { JWT_SECRET } from '../config/jwtSecret';
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   try {
