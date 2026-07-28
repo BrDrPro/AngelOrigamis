@@ -75,8 +75,8 @@ function Dashboard() {
 
         <nav className="sidebar-nav">
           <NavLink to="/admin/dashboard" end className={navItemClass}>
-            <i className="icon">📊</i>
-            <span>Dashboard</span>
+            <i className="icon">🏠</i>
+            <span>Início</span>
           </NavLink>
           <NavLink to="/admin/dashboard/produtos" className={navItemClass}>
             <i className="icon">📦</i>
@@ -89,6 +89,10 @@ function Dashboard() {
           <NavLink to="/admin/dashboard/mensagens" className={navItemClass}>
             <i className="icon">💬</i>
             <span>Mensagens</span>
+          </NavLink>
+          <NavLink to="/admin/dashboard/relatorios" className={navItemClass}>
+            <i className="icon">📊</i>
+            <span>Relatórios</span>
           </NavLink>
           <NavLink to="/admin/dashboard/configuracoes" className={navItemClass}>
             <i className="icon">⚙️</i>

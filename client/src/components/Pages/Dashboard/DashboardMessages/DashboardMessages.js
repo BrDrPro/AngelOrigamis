@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   fetchAllTestimonials,
   approveTestimonial,
@@ -10,6 +10,7 @@ import {
   deleteContactRequest
 } from '../../../../api/contactRequests';
 import Pagination, { usePagination } from '../Pagination/Pagination';
+import FilterSelect from '../FilterSelect/FilterSelect';
 
 function DashboardMessages() {
   const [testimonials, setTestimonials] = useState([]);
@@ -20,8 +21,35 @@ function DashboardMessages() {
   const [contactRequestsLoading, setContactRequestsLoading] = useState(true);
   const [contactRequestsError, setContactRequestsError] = useState('');
   const [contactRequestActionId, setContactRequestActionId] = useState(null);
-  const { page: testimonialsPage, setPage: setTestimonialsPage, totalPages: testimonialsTotalPages, pageItems: pagedTestimonials } = usePagination(testimonials);
-  const { page: requestsPage, setPage: setRequestsPage, totalPages: requestsTotalPages, pageItems: pagedRequests } = usePagination(contactRequests);
+  const [testimonialStatusFilter, setTestimonialStatusFilter] = useState('');
+  const [requestStatusFilter, setRequestStatusFilter] = useState('');
+
+  const filteredTestimonials = useMemo(() => {
+    return testimonials.filter((t) => {
+      if (testimonialStatusFilter === 'approved' && !t.approved) return false;
+      if (testimonialStatusFilter === 'pending' && t.approved) return false;
+      return true;
+    });
+  }, [testimonials, testimonialStatusFilter]);
+
+  const filteredRequests = useMemo(() => {
+    return contactRequests.filter((r) => {
+      if (requestStatusFilter === 'read' && !r.read) return false;
+      if (requestStatusFilter === 'unread' && r.read) return false;
+      return true;
+    });
+  }, [contactRequests, requestStatusFilter]);
+
+  const { page: testimonialsPage, setPage: setTestimonialsPage, totalPages: testimonialsTotalPages, pageItems: pagedTestimonials } = usePagination(filteredTestimonials);
+  const { page: requestsPage, setPage: setRequestsPage, totalPages: requestsTotalPages, pageItems: pagedRequests } = usePagination(filteredRequests);
+
+  useEffect(() => {
+    setTestimonialsPage(1);
+  }, [testimonialStatusFilter, setTestimonialsPage]);
+
+  useEffect(() => {
+    setRequestsPage(1);
+  }, [requestStatusFilter, setRequestsPage]);
 
   const loadTestimonials = useCallback(async () => {
     setTestimonialsLoading(true);
@@ -130,12 +158,34 @@ function DashboardMessages() {
       <div className="dashboard-content">
         <section className="content-section">
           <h2>Recados (Mural Público)</h2>
+
+          {testimonials.length > 0 && (
+            <div className="dashboard-filters">
+              <FilterSelect value={testimonialStatusFilter} onChange={(e) => setTestimonialStatusFilter(e.target.value)}>
+                <option value="">Todos os status</option>
+                <option value="approved">Aprovados</option>
+                <option value="pending">Pendentes</option>
+              </FilterSelect>
+              {testimonialStatusFilter && (
+                <button
+                  type="button"
+                  className="filter-clear-btn"
+                  onClick={() => setTestimonialStatusFilter('')}
+                >
+                  Limpar filtros
+                </button>
+              )}
+            </div>
+          )}
+
           {testimonialsLoading ? (
             <p className="empty-state">Carregando recados...</p>
           ) : testimonialsError ? (
             <p className="empty-state">{testimonialsError}</p>
           ) : testimonials.length === 0 ? (
             <p className="empty-state">Nenhum recado recebido</p>
+          ) : filteredTestimonials.length === 0 ? (
+            <p className="empty-state">Nenhum recado encontrado com esse filtro</p>
           ) : (
             <div className="product-table-wrapper">
               <table className="product-table">
@@ -182,12 +232,34 @@ function DashboardMessages() {
 
         <section className="content-section">
           <h2>Mensagens de Contato</h2>
+
+          {contactRequests.length > 0 && (
+            <div className="dashboard-filters">
+              <FilterSelect value={requestStatusFilter} onChange={(e) => setRequestStatusFilter(e.target.value)}>
+                <option value="">Todos os status</option>
+                <option value="unread">Não lidas</option>
+                <option value="read">Lidas</option>
+              </FilterSelect>
+              {requestStatusFilter && (
+                <button
+                  type="button"
+                  className="filter-clear-btn"
+                  onClick={() => setRequestStatusFilter('')}
+                >
+                  Limpar filtros
+                </button>
+              )}
+            </div>
+          )}
+
           {contactRequestsLoading ? (
             <p className="empty-state">Carregando mensagens...</p>
           ) : contactRequestsError ? (
             <p className="empty-state">{contactRequestsError}</p>
           ) : contactRequests.length === 0 ? (
             <p className="empty-state">Nenhuma mensagem recebida</p>
+          ) : filteredRequests.length === 0 ? (
+            <p className="empty-state">Nenhuma mensagem encontrada com esse filtro</p>
           ) : (
             <div className="product-table-wrapper">
               <table className="product-table">

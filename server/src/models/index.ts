@@ -10,6 +10,7 @@ import { Subcategory } from './subcategory.model';
 import { Faq } from './faq.model';
 import { AboutContent } from './aboutContent.model';
 import { HomeContent } from './homeContent.model';
+import { SiteVisit } from './siteVisit.model';
 
 const models = {
   Product,
@@ -23,6 +24,7 @@ const models = {
   Faq,
   AboutContent,
   HomeContent,
+  SiteVisit,
 };
 
-export { sequelize, models, Product, NewsletterSubscriber, Testimonial, ContactRequest, Order, StoreSettings, Category, Subcategory, Faq, AboutContent, HomeContent };
+export { sequelize, models, Product, NewsletterSubscriber, Testimonial, ContactRequest, Order, StoreSettings, Category, Subcategory, Faq, AboutContent, HomeContent, SiteVisit };

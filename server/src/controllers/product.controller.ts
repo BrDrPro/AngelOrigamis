@@ -166,7 +166,7 @@ export default class ProductController {
   static async updateProduct(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { name, description, price, category, subcategory, measure } = req.body;
+      const { name, description, price, category, subcategory, measure, keepImageUrls } = req.body;
       const files = (req as { files?: UploadedFile[] }).files ?? [];
 
       const existingProduct = await ProductService.getById(Number(id));
@@ -192,6 +192,23 @@ export default class ProductController {
         measure: measure || 'un',
       };
 
+      const currentImageUrls = (existingProduct.get('imageUrls') as string[] | undefined) || [];
+
+      // keepImageUrls indica quais imagens já existentes devem permanecer -
+      // permite adicionar, remover ou substituir imagens individualmente em
+      // vez de sempre trocar o conjunto inteiro.
+      let keptImageUrls: string[] = currentImageUrls;
+      if (keepImageUrls !== undefined) {
+        try {
+          keptImageUrls = typeof keepImageUrls === 'string' ? JSON.parse(keepImageUrls) : keepImageUrls;
+        } catch {
+          keptImageUrls = [];
+        }
+      }
+
+      const removedImageUrls = currentImageUrls.filter((url) => !keptImageUrls.includes(url));
+
+      let newImageUrls: string[] = [];
       if (files.length > 0) {
         const categoryFolder = categoryRecord.get('folderName') as string;
         const subcategoryFolder = subcategoryRecord ? (subcategoryRecord.get('folderName') as string) : '';
@@ -204,7 +221,7 @@ export default class ProductController {
 
         await fs.mkdir(destDir, { recursive: true });
 
-        const newImageUrls = await Promise.all(
+        newImageUrls = await Promise.all(
           files.map(async (file) => {
             const ext = path.extname(file.originalname) || '.jpg';
             const fileName = `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
@@ -213,9 +230,14 @@ export default class ProductController {
             return `/Produtos/${relativeDir.replace(/\\/g, '/')}/${fileName}`;
           })
         );
+      }
 
-        await deleteImageFiles(existingProduct.get('imageUrls') as string[] | undefined);
-        updateData.imageUrls = newImageUrls;
+      if (removedImageUrls.length > 0) {
+        await deleteImageFiles(removedImageUrls);
+      }
+
+      if (keepImageUrls !== undefined || newImageUrls.length > 0) {
+        updateData.imageUrls = [...keptImageUrls, ...newImageUrls];
       }
 
       const product = await ProductService.update(Number(id), updateData);

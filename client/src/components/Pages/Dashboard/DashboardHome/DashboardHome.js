@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { fetchProducts } from '../../../../api/products';
 import { fetchContactRequests } from '../../../../api/contactRequests';
 import { fetchOrders } from '../../../../api/orders';
+import { fetchTodayVisitCount } from '../../../../api/visits';
 
 function DashboardHome() {
   const [productsCount, setProductsCount] = useState(0);
   const [unreadCount, setUnreadCount] = useState(0);
   const [pendingOrdersCount, setPendingOrdersCount] = useState(0);
+  const [visitorsToday, setVisitorsToday] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,6 +24,10 @@ function DashboardHome() {
     fetchOrders()
       .then((data) => setPendingOrdersCount(data.filter((o) => o.status === 'novo').length))
       .catch((error) => console.error('Erro ao buscar pedidos:', error));
+
+    fetchTodayVisitCount()
+      .then((data) => setVisitorsToday(data.count))
+      .catch((error) => console.error('Erro ao buscar visitantes:', error));
   }, []);
 
   return (
@@ -60,7 +66,7 @@ function DashboardHome() {
           <div className="stat-icon" style={{ background: '#D19AAE' }}>👥</div>
           <div className="stat-content">
             <h3>Visitantes Hoje</h3>
-            <p className="stat-number">0</p>
+            <p className="stat-number">{visitorsToday}</p>
           </div>
         </div>
       </div>
@@ -84,7 +90,7 @@ function DashboardHome() {
               <i className="icon">✉️</i>
               <span>Ver Mensagens</span>
             </button>
-            <button className="action-btn">
+            <button className="action-btn" onClick={() => navigate('/admin/dashboard/relatorios')}>
               <i className="icon">📊</i>
               <span>Relatórios</span>
             </button>
