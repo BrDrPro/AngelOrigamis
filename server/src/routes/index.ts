@@ -7,6 +7,9 @@ import contactRequestRoutes from './contactRequest.routes';
 import orderRoutes from './order.routes';
 import storeSettingsRoutes from './storeSettings.routes';
 import categoryRoutes from './category.routes';
+import faqRoutes from './faq.routes';
+import aboutContentRoutes from './aboutContent.routes';
+import homeContentRoutes from './homeContent.routes';
 
 const router = Router();
 
@@ -18,5 +21,8 @@ router.use('/contact-requests', contactRequestRoutes);
 router.use('/orders', orderRoutes);
 router.use('/settings', storeSettingsRoutes);
 router.use('/categories', categoryRoutes);
+router.use('/faqs', faqRoutes);
+router.use('/about', aboutContentRoutes);
+router.use('/home-content', homeContentRoutes);
 
 export default router;

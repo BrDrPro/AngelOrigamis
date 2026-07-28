@@ -80,7 +80,7 @@ function Dashboard() {
           </NavLink>
           <NavLink to="/admin/dashboard/produtos" className={navItemClass}>
             <i className="icon">📦</i>
-            <span>Produtos</span>
+            <span>Gerenciar</span>
           </NavLink>
           <NavLink to="/admin/dashboard/pedidos" className={navItemClass}>
             <i className="icon">📝</i>

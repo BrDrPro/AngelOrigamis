@@ -7,3 +7,7 @@ export async function fetchCategories() {
 export async function updateCategoryVisibility(id, visible) {
   return apiFetch(`/categories/${id}/visibility`, { method: 'PATCH', body: { visible }, auth: true });
 }
+
+export async function updateCategoryDescription(id, description) {
+  return apiFetch(`/categories/${id}/description`, { method: 'PATCH', body: { description }, auth: true });
+}

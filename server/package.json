@@ -8,6 +8,10 @@
     "dev": "ts-node-dev src/app.ts",
     "seed": "ts-node src/scripts/seedProducts.ts",
     "seed:categories": "ts-node src/scripts/seedCategories.ts",
+    "seed:category-descriptions": "ts-node src/scripts/seedCategoryDescriptions.ts",
+    "seed:faqs": "ts-node src/scripts/seedFaqs.ts",
+    "seed:about": "ts-node src/scripts/seedAboutContent.ts",
+    "seed:home": "ts-node src/scripts/seedHomeContent.ts",
     "build": "tsc",
     "lint": "eslint . --ext .ts"
   },

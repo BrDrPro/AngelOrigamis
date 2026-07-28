@@ -7,6 +7,9 @@ import { Order } from './order.model';
 import { StoreSettings } from './storeSettings.model';
 import { Category } from './category.model';
 import { Subcategory } from './subcategory.model';
+import { Faq } from './faq.model';
+import { AboutContent } from './aboutContent.model';
+import { HomeContent } from './homeContent.model';
 
 const models = {
   Product,
@@ -17,6 +20,9 @@ const models = {
   StoreSettings,
   Category,
   Subcategory,
+  Faq,
+  AboutContent,
+  HomeContent,
 };
 
-export { sequelize, models, Product, NewsletterSubscriber, Testimonial, ContactRequest, Order, StoreSettings, Category, Subcategory };
+export { sequelize, models, Product, NewsletterSubscriber, Testimonial, ContactRequest, Order, StoreSettings, Category, Subcategory, Faq, AboutContent, HomeContent };

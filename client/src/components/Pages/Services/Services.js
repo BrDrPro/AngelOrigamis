@@ -3,9 +3,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { CartContext } from '../../CartContext/CartContext';
 import { fetchProducts } from '../../../api/products';
+import { fetchCategories } from '../../../api/categories';
 import './Services.css';
 import './ServicesResponsive.css';
-import categoryDescriptions from '../../../data/categoryDescriptions';
 
 function groupProductsByCategory(products) {
 	const grouped = {};
@@ -27,9 +27,22 @@ function Services() {
 	const [modalImageIndex, setModalImageIndex] = useState(0);
 	const [products, setProducts] = useState([]);
 	const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+	const [categoryDescriptions, setCategoryDescriptions] = useState({});
 
 	useEffect(() => {
 		fetchProducts().then(setProducts).catch(console.error);
+	}, []);
+
+	useEffect(() => {
+		fetchCategories()
+			.then((data) => {
+				const descriptions = {};
+				data.forEach((cat) => {
+					if (cat.description) descriptions[cat.name] = cat.description;
+				});
+				setCategoryDescriptions(descriptions);
+			})
+			.catch(console.error);
 	}, []);
 
 	useEffect(() => {

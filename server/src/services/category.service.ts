@@ -37,4 +37,12 @@ export default class CategoryService {
     await category.update({ visible });
     return category;
   }
+
+  static async updateDescription(id: number, description: string) {
+    const category = await Category.findByPk(id);
+    if (!category) return null;
+
+    await category.update({ description });
+    return category;
+  }
 }

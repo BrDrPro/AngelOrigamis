@@ -5,9 +5,16 @@ import './HomeResponsive.css'
 import { CartContext } from '../../CartContext/CartContext';
 import { fetchProducts } from '../../../api/products';
 import { fetchTestimonials } from '../../../api/testimonials';
+import { fetchHomeContent } from '../../../api/homeContent';
 import { apiFetch } from '../../../api/apiClient';
 
 function Home() {
+  const [pageContent, setPageContent] = useState(null);
+
+  useEffect(() => {
+    fetchHomeContent().then(setPageContent).catch(console.error);
+  }, []);
+
   // Estado para controlar o índice inicial visível no carrossel
   const [startIndex, setStartIndex] = useState(0);
   const { addToCart } = useContext(CartContext);
@@ -168,8 +175,8 @@ function Home() {
         {/* Hero Section */}
         <section className="hero">
           <div className="hero-content">
-            <h1>Arte em Papel e Artesanato</h1>
-            <p>Origamis exclusivos feitos com dedicação e significado</p>
+            <h1>{pageContent?.heroTitle || 'Arte em Papel e Artesanato'}</h1>
+            <p>{pageContent?.heroSubtitle || 'Origamis exclusivos feitos com dedicação e significado'}</p>
             <Link to="/services" className="cta-button">Ver Produtos</Link>
           </div>
         </section>
@@ -252,23 +259,15 @@ function Home() {
 
         {/* Benefits Section */}
         <section className="benefits">
-          <h2>Por que escolher arte em origami?</h2>
+          <h2>{pageContent?.benefitsTitle || 'Por que escolher arte em origami?'}</h2>
           <div className="benefits-container">
-            <div className="benefit-item">
-              <div className="benefit-icon">🎎</div>
-              <h3>Significado Cultural</h3>
-              <p>Cada peça carrega tradições e simbolismos orientais</p>
-            </div>
-            <div className="benefit-item">
-              <div className="benefit-icon">🌿</div>
-              <h3>Sustentabilidade</h3>
-              <p>Utilizamos materiais ecológicos e de baixo impacto ambiental</p>
-            </div>
-            <div className="benefit-item">
-              <div className="benefit-icon">❤️</div>
-              <h3>Feito à Mão</h3>
-              <p>Peças únicas com atenção aos mínimos detalhes</p>
-            </div>
+            {(pageContent?.benefitCards || []).map((card, index) => (
+              <div className="benefit-item" key={index}>
+                <div className="benefit-icon">{card.icon}</div>
+                <h3>{card.title}</h3>
+                <p>{card.text}</p>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -302,8 +301,8 @@ function Home() {
 
         {/* Newsletter */}
         <section className="newsletter">
-          <h2>Receba nossas novidades</h2>
-          <p>Inscreva-se para conhecer novos modelos e promoções</p>
+          <h2>{pageContent?.newsletterTitle || 'Receba nossas novidades'}</h2>
+          <p>{pageContent?.newsletterText || 'Inscreva-se para conhecer novos modelos e promoções'}</p>
           <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
             <input
               type="email"
