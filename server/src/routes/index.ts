@@ -10,6 +10,7 @@ import categoryRoutes from './category.routes';
 import faqRoutes from './faq.routes';
 import aboutContentRoutes from './aboutContent.routes';
 import homeContentRoutes from './homeContent.routes';
+import siteVisitRoutes from './siteVisit.routes';
 
 const router = Router();
 
@@ -24,5 +25,6 @@ router.use('/categories', categoryRoutes);
 router.use('/faqs', faqRoutes);
 router.use('/about', aboutContentRoutes);
 router.use('/home-content', homeContentRoutes);
+router.use('/visits', siteVisitRoutes);
 
 export default router;

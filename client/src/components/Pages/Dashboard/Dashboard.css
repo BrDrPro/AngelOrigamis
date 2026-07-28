@@ -428,6 +428,81 @@
   font-style: italic;
 }
 
+.dashboard-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.dashboard-filters input[type="text"],
+.dashboard-filters input[type="date"],
+.dashboard-filters select {
+  padding: 0.6rem 0.75rem;
+  border: 2px solid #D19AAE;
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: #333;
+  background-color: #fff;
+  transition: border-color 0.3s;
+}
+
+.dashboard-filters select {
+  padding-right: 2.25rem;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236D9E8B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 0.9rem;
+}
+
+.dashboard-filters select.select-open {
+  border-color: #6D9E8B;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236D9E8B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='18 15 12 9 6 15'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+.dashboard-filters input[type="text"] {
+  flex: 1;
+  min-width: 180px;
+}
+
+.dashboard-filters input:focus,
+.dashboard-filters select:focus {
+  outline: none;
+  border-color: #6D9E8B;
+}
+
+.dashboard-filters .filter-clear-btn {
+  background: transparent;
+  border: 1px solid #999;
+  color: #999;
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background 0.3s, color 0.3s;
+}
+
+.dashboard-filters .filter-clear-btn:hover {
+  background: #999;
+  color: #FFF6EB;
+}
+
+.filter-date-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: #6D9E8B;
+}
+
 .section-hint {
   color: #999;
   font-family: 'Montserrat', sans-serif;
@@ -436,8 +511,15 @@
 }
 
 .product-actions {
-  display: flex;
-  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.product-actions > button {
+  margin-right: 0.5rem;
+}
+
+.product-actions > button:last-child {
+  margin-right: 0;
 }
 
 .edit-product-btn {

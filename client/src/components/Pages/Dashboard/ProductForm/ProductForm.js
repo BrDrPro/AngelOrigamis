@@ -17,6 +17,7 @@ function ProductForm({ product, onClose, onSuccess }) {
   });
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [categories, setCategories] = useState([]);
@@ -37,6 +38,7 @@ function ProductForm({ product, onClose, onSuccess }) {
         subcategory: product.subcategory || '',
         measure: product.measure || '',
       });
+      setExistingImages(product.imageUrls || []);
     }
   }, [product]);
 
@@ -73,7 +75,19 @@ function ProductForm({ product, onClose, onSuccess }) {
 
   const handleFilesChange = (e) => {
     const selectedFiles = Array.from(e.target.files || []);
-    setImages(selectedFiles);
+    setImages((prev) => [...prev, ...selectedFiles]);
+    e.target.value = '';
+  };
+
+  const removeNewImage = (index) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const removeExistingImage = (url) => {
+    if (!window.confirm('Remover esta imagem? Ela será apagada definitivamente ao salvar o produto.')) {
+      return;
+    }
+    setExistingImages((prev) => prev.filter((u) => u !== url));
   };
 
   useEffect(() => {
@@ -91,7 +105,8 @@ function ProductForm({ product, onClose, onSuccess }) {
     setLoading(true);
 
     try {
-      if (!isEditMode && images.length === 0) {
+      const totalImages = existingImages.length + images.length;
+      if (totalImages === 0) {
         setError('Selecione pelo menos uma imagem.');
         setLoading(false);
         return;
@@ -119,6 +134,7 @@ function ProductForm({ product, onClose, onSuccess }) {
       images.forEach((file) => payload.append('images', file));
 
       if (isEditMode) {
+        payload.append('keepImageUrls', JSON.stringify(existingImages));
         await updateProduct(product.id, payload);
       } else {
         await createProduct(payload);
@@ -135,15 +151,11 @@ function ProductForm({ product, onClose, onSuccess }) {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h2>{isEditMode ? 'Editar Produto' : 'Adicionar Novo Produto'}</h2>
-          <button className="close-btn" onClick={onClose}>✕</button>
-        </div>
+    <section className="content-section">
+      <h2>{isEditMode ? 'Editar Produto' : 'Adicionar Novo Produto'}</h2>
 
-        <form onSubmit={handleSubmit} className="product-form">
-          {error && <div className="error-message">{error}</div>}
+      <form onSubmit={handleSubmit} className="product-form">
+        {error && <div className="error-message">{error}</div>}
 
           <div className="form-row">
             <div className="form-group">
@@ -230,33 +242,55 @@ function ProductForm({ product, onClose, onSuccess }) {
 
           <div className="form-group">
             <label>Imagens do Produto</label>
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleFilesChange}
-            />
-            {isEditMode && (
-              <small>Deixe em branco para manter as imagens atuais. Selecionar novas imagens substitui todas as atuais.</small>
-            )}
+            <div className="image-input-group">
+              <label htmlFor="product-images-input" className="add-image-btn">
+                + Adicionar imagens
+              </label>
+              <input
+                id="product-images-input"
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleFilesChange}
+                hidden
+              />
+            </div>
+            <small>
+              {isEditMode
+                ? 'Clique no X para remover uma imagem existente ou adicione novas imagens.'
+                : 'Selecione uma ou mais imagens do produto.'}
+            </small>
 
-            {imagePreviews.length > 0 ? (
+            {(existingImages.length > 0 || imagePreviews.length > 0) && (
               <div className="image-list">
+                {existingImages.map((url) => (
+                  <div key={url} className="image-item">
+                    <img src={url} alt="Imagem atual" />
+                    <button
+                      type="button"
+                      className="remove-image-btn"
+                      onClick={() => removeExistingImage(url)}
+                      title="Remover imagem"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
                 {imagePreviews.map((url, index) => (
-                  <div key={index} className="image-item">
-                    <img src={url} alt={`Preview ${index + 1}`} />
+                  <div key={url} className="image-item">
+                    <img src={url} alt={`Nova imagem ${index + 1}`} />
+                    <button
+                      type="button"
+                      className="remove-image-btn"
+                      onClick={() => removeNewImage(index)}
+                      title="Remover imagem"
+                    >
+                      ✕
+                    </button>
                   </div>
                 ))}
               </div>
-            ) : isEditMode && product.imageUrls && product.imageUrls.length > 0 ? (
-              <div className="image-list">
-                {product.imageUrls.map((url, index) => (
-                  <div key={index} className="image-item">
-                    <img src={url} alt={`Imagem atual ${index + 1}`} />
-                  </div>
-                ))}
-              </div>
-            ) : null}
+            )}
           </div>
 
           <div className="form-actions">
@@ -267,9 +301,8 @@ function ProductForm({ product, onClose, onSuccess }) {
               {loading ? 'Salvando...' : 'Salvar Produto'}
             </button>
           </div>
-        </form>
-      </div>
-    </div>
+      </form>
+    </section>
   );
 }
 

@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import ProductForm from '../ProductForm/ProductForm';
 import Pagination, { usePagination } from '../Pagination/Pagination';
+import FilterSelect from '../FilterSelect/FilterSelect';
 import SiteContentSection from './SiteContentSection';
 import { fetchAllProducts, deleteProduct, updateProductVisibility } from '../../../../api/products';
 import { fetchCategories, updateCategoryVisibility, updateCategoryDescription } from '../../../../api/categories';
@@ -14,15 +15,42 @@ const SECTIONS = [
 
 function DashboardProducts() {
   const location = useLocation();
-  const [activeSection, setActiveSection] = useState(location.state?.section || 'produtos');
-  const [showProductForm, setShowProductForm] = useState(Boolean(location.state?.openForm));
+  const [activeSection, setActiveSection] = useState(
+    location.state?.openForm ? 'produto-form' : location.state?.section || 'produtos'
+  );
   const [editingProduct, setEditingProduct] = useState(null);
   const [products, setProducts] = useState([]);
   const [productsLoading, setProductsLoading] = useState(true);
   const [productsError, setProductsError] = useState('');
   const [deletingId, setDeletingId] = useState(null);
   const [visibilityActionId, setVisibilityActionId] = useState(null);
-  const { page, setPage, totalPages, pageItems: pagedProducts } = usePagination(products);
+  const [productSearch, setProductSearch] = useState('');
+  const [productCategoryFilter, setProductCategoryFilter] = useState('');
+  const [productStatusFilter, setProductStatusFilter] = useState('');
+
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      if (productSearch.trim() && !product.name.toLowerCase().includes(productSearch.trim().toLowerCase())) {
+        return false;
+      }
+      if (productCategoryFilter && product.category !== productCategoryFilter) {
+        return false;
+      }
+      if (productStatusFilter === 'visible' && !product.visible) {
+        return false;
+      }
+      if (productStatusFilter === 'hidden' && product.visible) {
+        return false;
+      }
+      return true;
+    });
+  }, [products, productSearch, productCategoryFilter, productStatusFilter]);
+
+  const { page, setPage, totalPages, pageItems: pagedProducts } = usePagination(filteredProducts);
+
+  useEffect(() => {
+    setPage(1);
+  }, [productSearch, productCategoryFilter, productStatusFilter, setPage]);
 
   const [categories, setCategories] = useState([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
@@ -31,6 +59,23 @@ function DashboardProducts() {
   const [expandedCategoryId, setExpandedCategoryId] = useState(null);
   const [descriptionDraft, setDescriptionDraft] = useState('');
   const [descriptionSavingId, setDescriptionSavingId] = useState(null);
+  const [categorySearch, setCategorySearch] = useState('');
+  const [categoryStatusFilter, setCategoryStatusFilter] = useState('');
+
+  const filteredCategories = useMemo(() => {
+    return categories.filter((category) => {
+      if (categorySearch.trim() && !category.name.toLowerCase().includes(categorySearch.trim().toLowerCase())) {
+        return false;
+      }
+      if (categoryStatusFilter === 'visible' && !category.visible) {
+        return false;
+      }
+      if (categoryStatusFilter === 'hidden' && category.visible) {
+        return false;
+      }
+      return true;
+    });
+  }, [categories, categorySearch, categoryStatusFilter]);
 
   const loadProducts = useCallback(async () => {
     setProductsLoading(true);
@@ -70,13 +115,18 @@ function DashboardProducts() {
     loadCategories();
   };
 
+  const handleAddProduct = () => {
+    setEditingProduct(null);
+    setActiveSection('produto-form');
+  };
+
   const handleEditProduct = (product) => {
     setEditingProduct(product);
-    setShowProductForm(true);
+    setActiveSection('produto-form');
   };
 
   const handleCloseProductForm = () => {
-    setShowProductForm(false);
+    setActiveSection('produtos');
     setEditingProduct(null);
   };
 
@@ -169,12 +219,23 @@ function DashboardProducts() {
                 <span>{section.label}</span>
               </button>
             ))}
-            <button className="action-btn" onClick={() => setShowProductForm(true)}>
+            <button
+              className={`action-btn${activeSection === 'produto-form' && !editingProduct ? ' action-btn-active' : ''}`}
+              onClick={handleAddProduct}
+            >
               <i className="icon">➕</i>
               <span>Adicionar Produto</span>
             </button>
           </div>
         </section>
+
+        {activeSection === 'produto-form' && (
+          <ProductForm
+            product={editingProduct}
+            onClose={handleCloseProductForm}
+            onSuccess={handleProductSuccess}
+          />
+        )}
 
         {activeSection === 'conteudo' && <SiteContentSection />}
 
@@ -185,12 +246,43 @@ function DashboardProducts() {
             Ocultar uma categoria remove todos os produtos dela da página de produtos do site,
             sem apagar nenhum registro. Continua disponível pra cadastro de produtos aqui no painel.
           </p>
+
+          {categories.length > 0 && (
+            <div className="dashboard-filters">
+              <input
+                type="text"
+                placeholder="Buscar categoria por nome..."
+                value={categorySearch}
+                onChange={(e) => setCategorySearch(e.target.value)}
+              />
+              <FilterSelect value={categoryStatusFilter} onChange={(e) => setCategoryStatusFilter(e.target.value)}>
+                <option value="">Todos os status</option>
+                <option value="visible">Visíveis</option>
+                <option value="hidden">Ocultas</option>
+              </FilterSelect>
+              {(categorySearch || categoryStatusFilter) && (
+                <button
+                  type="button"
+                  className="filter-clear-btn"
+                  onClick={() => {
+                    setCategorySearch('');
+                    setCategoryStatusFilter('');
+                  }}
+                >
+                  Limpar filtros
+                </button>
+              )}
+            </div>
+          )}
+
           {categoriesLoading ? (
             <p className="empty-state">Carregando categorias...</p>
           ) : categoriesError ? (
             <p className="empty-state">{categoriesError}</p>
           ) : categories.length === 0 ? (
             <p className="empty-state">Nenhuma categoria cadastrada</p>
+          ) : filteredCategories.length === 0 ? (
+            <p className="empty-state">Nenhuma categoria encontrada com esses filtros</p>
           ) : (
             <div className="product-table-wrapper">
               <table className="product-table">
@@ -202,7 +294,7 @@ function DashboardProducts() {
                   </tr>
                 </thead>
                 <tbody>
-                  {categories.map((category) => (
+                  {filteredCategories.map((category) => (
                     <React.Fragment key={category.id}>
                       <tr className={category.visible ? '' : 'hidden-row'}>
                         <td>{category.name}</td>
@@ -273,12 +365,50 @@ function DashboardProducts() {
         {activeSection === 'produtos' && (
         <section className="content-section">
           <h2>Produtos Cadastrados</h2>
+
+          {products.length > 0 && (
+            <div className="dashboard-filters">
+              <input
+                type="text"
+                placeholder="Buscar produto por nome..."
+                value={productSearch}
+                onChange={(e) => setProductSearch(e.target.value)}
+              />
+              <FilterSelect value={productCategoryFilter} onChange={(e) => setProductCategoryFilter(e.target.value)}>
+                <option value="">Todas as categorias</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.name}>{category.name}</option>
+                ))}
+              </FilterSelect>
+              <FilterSelect value={productStatusFilter} onChange={(e) => setProductStatusFilter(e.target.value)}>
+                <option value="">Todos os status</option>
+                <option value="visible">Visíveis</option>
+                <option value="hidden">Ocultos</option>
+              </FilterSelect>
+              {(productSearch || productCategoryFilter || productStatusFilter) && (
+                <button
+                  type="button"
+                  className="filter-clear-btn"
+                  onClick={() => {
+                    setProductSearch('');
+                    setProductCategoryFilter('');
+                    setProductStatusFilter('');
+                  }}
+                >
+                  Limpar filtros
+                </button>
+              )}
+            </div>
+          )}
+
           {productsLoading ? (
             <p className="empty-state">Carregando produtos...</p>
           ) : productsError ? (
             <p className="empty-state">{productsError}</p>
           ) : products.length === 0 ? (
             <p className="empty-state">Nenhum produto cadastrado</p>
+          ) : filteredProducts.length === 0 ? (
+            <p className="empty-state">Nenhum produto encontrado com esses filtros</p>
           ) : (
             <div className="product-table-wrapper">
               <table className="product-table">
@@ -349,14 +479,6 @@ function DashboardProducts() {
         </section>
         )}
       </div>
-
-      {showProductForm && (
-        <ProductForm
-          product={editingProduct}
-          onClose={handleCloseProductForm}
-          onSuccess={handleProductSuccess}
-        />
-      )}
     </>
   );
 }

@@ -105,11 +105,8 @@
   gap: 0.5rem;
 }
 
-.image-input-group input {
-  flex: 1;
-}
-
-.add-image-btn {
+.form-group label.add-image-btn {
+  display: inline-block;
   padding: 0.75rem 1.5rem;
   background: #6D9E8B;
   color: #FFF6EB;
@@ -117,12 +114,14 @@
   border-radius: 6px;
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
+  font-size: 0.95rem;
   cursor: pointer;
   transition: background 0.3s;
   white-space: nowrap;
+  text-align: center;
 }
 
-.add-image-btn:hover {
+.form-group label.add-image-btn:hover {
   background: #5a8573;
 }
 

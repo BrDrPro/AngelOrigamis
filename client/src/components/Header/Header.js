@@ -39,7 +39,7 @@ function Header() {
         </div>
         <nav className="main-nav">
           <ul>
-            <li><button onClick={() => handleNav('/')} className="nav-btn">Home</button></li>
+            <li><button onClick={() => handleNav('/')} className="nav-btn">Início</button></li>
             <li><button onClick={() => handleNav('/about')} className="nav-btn">Sobre</button></li>
             <li><button onClick={() => handleNav('/services')} className="nav-btn">Produtos</button></li>
             <li><button onClick={() => handleNav('/contact')} className="nav-btn">Contato</button></li>
