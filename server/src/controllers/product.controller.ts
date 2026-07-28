@@ -18,11 +18,19 @@ type UploadedFile = {
 
 const deleteImageFiles = async (imageUrls?: string[] | null) => {
   if (!imageUrls || imageUrls.length === 0) return;
-  const baseDir = getClientProductsDir();
+  const baseDir = path.resolve(getClientProductsDir());
   await Promise.all(
     imageUrls.map(async (url) => {
       const relativePath = url.replace(/^\/Produtos\//, '');
-      const filePath = path.join(baseDir, relativePath);
+      const filePath = path.resolve(baseDir, relativePath);
+
+      // Garante que o caminho resolvido continua dentro da pasta de produtos,
+      // mesmo que a URL guardada no banco (histórica ou informada manualmente)
+      // contenha sequências como "../" tentando escapar da pasta.
+      if (filePath !== baseDir && !filePath.startsWith(baseDir + path.sep)) {
+        return;
+      }
+
       try {
         await fs.unlink(filePath);
       } catch {

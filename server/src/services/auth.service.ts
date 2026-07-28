@@ -1,8 +1,7 @@
 import { Admin } from '../models/admin.model';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'change-this-secret-in-production';
+import { JWT_SECRET } from '../config/jwtSecret';
 
 export default class AuthService {
   static async login(email: string, password: string) {

@@ -1,12 +1,13 @@
 import { Router } from 'express';
 import TestimonialController from '../controllers/testimonial.controller';
 import { authMiddleware } from '../middlewares/auth.middleware';
+import { publicFormRateLimiter } from '../middlewares/rateLimit.middleware';
 
 const router = Router();
 
 // Rotas públicas
 router.get('/', TestimonialController.getApproved);
-router.post('/', TestimonialController.create);
+router.post('/', publicFormRateLimiter, TestimonialController.create);
 
 // Rotas protegidas (só admin autenticado)
 router.get('/all', authMiddleware, TestimonialController.getAll);
