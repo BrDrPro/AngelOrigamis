@@ -247,6 +247,28 @@
   font-size: 1.2rem;
 }
 
+.action-btn-active {
+  background: #6D9E8B;
+  color: #FFF6EB;
+  border-color: #6D9E8B;
+}
+
+.content-subheading {
+  color: #6D9E8B;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 1rem 0 0.75rem 0;
+}
+
+.content-card-editor {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.5);
+}
+
 .product-table-wrapper {
   overflow-x: auto;
 }
@@ -314,7 +336,8 @@
   font-size: 0.9rem;
 }
 
-.settings-form input {
+.settings-form input,
+.settings-form textarea {
   padding: 0.65rem;
   border: 2px solid #D19AAE;
   border-radius: 6px;
@@ -323,9 +346,20 @@
   transition: border-color 0.3s;
 }
 
-.settings-form input:focus {
+.settings-form input:focus,
+.settings-form textarea:focus {
   outline: none;
   border-color: #6D9E8B;
+}
+
+.settings-form textarea {
+  resize: vertical;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.settings-form-wide {
+  max-width: 100%;
 }
 
 .settings-form .action-btn {

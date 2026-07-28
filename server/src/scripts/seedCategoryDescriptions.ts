@@ -1,4 +1,9 @@
-const categoryDescriptions = {
+import { sequelize } from '../models';
+import { Category } from '../models/category.model';
+
+// Conteúdo migrado de client/src/data/categoryDescriptions.js - primeira carga
+// das descrições que já existiam hardcoded no frontend.
+const DESCRIPTIONS: Record<string, string> = {
   'Móbiles': 'Leves e delicados, os móbiles carregam movimento e poesia. Suspensos no ar, dançam suavemente com a brisa, trazendo leveza e harmonia ao ambiente. Cada elemento pode ter significados especiais — como flores que simbolizam pureza ou pássaros que remetem à liberdade. Além de decorar, são também convites à contemplação e ao bem-estar.',
   'Kussudamas': 'Originárias da tradição japonesa, as esferas kussudama são feitas de módulos de origami que se unem em perfeita simetria. Mais do que peças decorativas, simbolizam cura, proteção e equilíbrio. São ideais para trazer energia positiva a lares e espaços de meditação, além de encantar como presentes que carregam história e delicadeza.',
   'Colares de Mesa': 'Criados para adornar mesas e aparadores, os colares de mesa unem estética e simbolismo. Suas formas remetem à ideia de conexão e união, como correntes que ligam pessoas, afetos e histórias. São perfeitos para deixar a decoração mais acolhedora, com um charme artesanal que transforma qualquer canto da casa.',
@@ -11,4 +16,26 @@ const categoryDescriptions = {
   'Decoração de Natal': 'Encante-se com nossa coleção especial de Natal! Guirlandas artesanais com pérolas e detalhes dourados, colares de mesa em tons festivos, trios de árvores decorativas, delicados anjos em pingentes e escapulários de porta exclusivos. Cada peça é feita à mão com muito carinho, unindo origami, fios nobres, madeira e elementos naturais. Perfeito para decorar sua casa com o espírito natalino ou presentear quem você ama com arte e significado neste Natal!',
 };
 
-export default categoryDescriptions;
+async function seed() {
+  await sequelize.sync();
+
+  for (const [name, description] of Object.entries(DESCRIPTIONS)) {
+    const category = await Category.findOne({ where: { name } });
+    if (!category) {
+      console.warn(`Categoria "${name}" não encontrada - pulando (rode seed:categories primeiro).`);
+      continue;
+    }
+    // Só preenche se ainda não tiver descrição, pra não sobrescrever uma edição já feita pelo admin.
+    if (!category.get('description')) {
+      await category.update({ description });
+      console.log(`Descrição migrada: ${name}`);
+    } else {
+      console.log(`Categoria "${name}" já tem descrição - mantida.`);
+    }
+  }
+
+  console.log('Descrições de categoria migradas com sucesso!');
+  process.exit();
+}
+
+seed();

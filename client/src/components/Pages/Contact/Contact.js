@@ -2,12 +2,14 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import { createTestimonial } from '../../../api/testimonials';
 import { createContactRequest } from '../../../api/contactRequests';
+import { fetchFaqs } from '../../../api/faqs';
 import { StoreSettingsContext } from '../../StoreSettingsContext/StoreSettingsContext';
 import './Contact.css';
 import './ContactResponsive.css';
 
 function Contact() {
   const { whatsappPhone } = useContext(StoreSettingsContext);
+  const [faqs, setFaqs] = useState([]);
   const [selectedForm, setSelectedForm] = useState('recado');
   const [nomeZap, setNomeZap] = useState('');
   const [msgZap, setMsgZap] = useState('');
@@ -34,6 +36,10 @@ function Contact() {
       setSelectedForm('encomenda');
     }
   }, [location.search, location.key]); // Adiciona location.key para forçar atualização
+
+  useEffect(() => {
+    fetchFaqs().then(setFaqs).catch(console.error);
+  }, []);
 
   function handleWhatsApp(e) {
     e.preventDefault();
@@ -260,22 +266,12 @@ function Contact() {
       <section className="faq-section">
         <h2>Perguntas Frequentes</h2>
         <div className="faq-container">
-          <div className="faq-item">
-            <h3>Qual o prazo para entrega de origamis personalizados?</h3>
-            <p>O prazo varia conforme a complexidade e quantidade. Origamis simples podem ser feitos em 1-2 dias, peças mais complexas podem levar até 2 semanas.</p>
-          </div>
-          <div className="faq-item">
-            <h3>Os origamis são duráveis?</h3>
-            <p>Sim! Utilizamos papéis especiais que garantem durabilidade. Para maior conservação, recomendamos manter em local seco e protegido do sol direto.</p>
-          </div>
-          <div className="faq-item">
-            <h3>Fazem workshops de origami?</h3>
-            <p>Sim, oferecemos workshops para grupos pequenos e eventos. Entre em contato para mais informações sobre datas e preços.</p>
-          </div>
-          <div className="faq-item">
-            <h3>Posso encomendar produtos para presente?</h3>
-            <p>Com certeza! Oferecemos embalagens especiais e podemos incluir cartões personalizados em suas encomendas.</p>
-          </div>
+          {faqs.map((faq) => (
+            <div className="faq-item" key={faq.id}>
+              <h3>{faq.question}</h3>
+              <p>{faq.answer}</p>
+            </div>
+          ))}
         </div>
       </section>
     </div>

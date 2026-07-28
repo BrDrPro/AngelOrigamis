@@ -2,11 +2,19 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import ProductForm from '../ProductForm/ProductForm';
 import Pagination, { usePagination } from '../Pagination/Pagination';
+import SiteContentSection from './SiteContentSection';
 import { fetchAllProducts, deleteProduct, updateProductVisibility } from '../../../../api/products';
-import { fetchCategories, updateCategoryVisibility } from '../../../../api/categories';
+import { fetchCategories, updateCategoryVisibility, updateCategoryDescription } from '../../../../api/categories';
+
+const SECTIONS = [
+  { id: 'produtos', label: 'Produtos Cadastrados', icon: '📦' },
+  { id: 'categorias', label: 'Categorias', icon: '🏷️' },
+  { id: 'conteudo', label: 'Conteúdo do Site', icon: '📝' },
+];
 
 function DashboardProducts() {
   const location = useLocation();
+  const [activeSection, setActiveSection] = useState(location.state?.section || 'produtos');
   const [showProductForm, setShowProductForm] = useState(Boolean(location.state?.openForm));
   const [editingProduct, setEditingProduct] = useState(null);
   const [products, setProducts] = useState([]);
@@ -20,6 +28,9 @@ function DashboardProducts() {
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [categoriesError, setCategoriesError] = useState('');
   const [categoryActionId, setCategoryActionId] = useState(null);
+  const [expandedCategoryId, setExpandedCategoryId] = useState(null);
+  const [descriptionDraft, setDescriptionDraft] = useState('');
+  const [descriptionSavingId, setDescriptionSavingId] = useState(null);
 
   const loadProducts = useCallback(async () => {
     setProductsLoading(true);
@@ -99,6 +110,31 @@ function DashboardProducts() {
     }
   };
 
+  const handleToggleDescriptionEditor = (category) => {
+    if (expandedCategoryId === category.id) {
+      setExpandedCategoryId(null);
+      return;
+    }
+    setExpandedCategoryId(category.id);
+    setDescriptionDraft(category.description || '');
+  };
+
+  const handleSaveDescription = async (category) => {
+    setDescriptionSavingId(category.id);
+    try {
+      const updated = await updateCategoryDescription(category.id, descriptionDraft.trim());
+      setCategories((prev) =>
+        prev.map((c) => (c.id === category.id ? { ...c, description: updated.description } : c))
+      );
+      setExpandedCategoryId(null);
+    } catch (error) {
+      console.error('Erro ao atualizar descrição da categoria:', error);
+      alert('Não foi possível atualizar a descrição da categoria.');
+    } finally {
+      setDescriptionSavingId(null);
+    }
+  };
+
   const handleToggleCategoryVisibility = async (category) => {
     setCategoryActionId(category.id);
     try {
@@ -115,14 +151,24 @@ function DashboardProducts() {
   return (
     <>
       <header className="dashboard-header">
-        <h1>Produtos</h1>
-        <p className="dashboard-subtitle">Gerencie o catálogo da loja</p>
+        <h1>Gerenciar</h1>
+        <p className="dashboard-subtitle">Produtos, categorias e conteúdo do site</p>
       </header>
 
       <div className="dashboard-content">
         <section className="content-section">
-          <h2>Ações</h2>
+          <h2>Menu</h2>
           <div className="quick-actions">
+            {SECTIONS.map((section) => (
+              <button
+                key={section.id}
+                className={`action-btn${activeSection === section.id ? ' action-btn-active' : ''}`}
+                onClick={() => setActiveSection(section.id)}
+              >
+                <i className="icon">{section.icon}</i>
+                <span>{section.label}</span>
+              </button>
+            ))}
             <button className="action-btn" onClick={() => setShowProductForm(true)}>
               <i className="icon">➕</i>
               <span>Adicionar Produto</span>
@@ -130,6 +176,9 @@ function DashboardProducts() {
           </div>
         </section>
 
+        {activeSection === 'conteudo' && <SiteContentSection />}
+
+        {activeSection === 'categorias' && (
         <section className="content-section">
           <h2>Categorias</h2>
           <p className="section-hint">
@@ -154,28 +203,74 @@ function DashboardProducts() {
                 </thead>
                 <tbody>
                   {categories.map((category) => (
-                    <tr key={category.id} className={category.visible ? '' : 'hidden-row'}>
-                      <td>{category.name}</td>
-                      <td>{category.visible ? 'Visível no site' : 'Oculta do site'}</td>
-                      <td className="product-actions">
-                        <button
-                          className={category.visible ? 'delete-product-btn' : 'edit-product-btn'}
-                          onClick={() => handleToggleCategoryVisibility(category)}
-                          disabled={categoryActionId === category.id}
-                        >
-                          {categoryActionId === category.id
-                            ? 'Salvando...'
-                            : category.visible ? 'Ocultar' : 'Mostrar'}
-                        </button>
-                      </td>
-                    </tr>
+                    <React.Fragment key={category.id}>
+                      <tr className={category.visible ? '' : 'hidden-row'}>
+                        <td>{category.name}</td>
+                        <td>{category.visible ? 'Visível no site' : 'Oculta do site'}</td>
+                        <td className="product-actions">
+                          <button
+                            className="edit-product-btn"
+                            onClick={() => handleToggleDescriptionEditor(category)}
+                          >
+                            {expandedCategoryId === category.id ? 'Fechar' : 'Editar descrição'}
+                          </button>
+                          <button
+                            className={category.visible ? 'delete-product-btn' : 'edit-product-btn'}
+                            onClick={() => handleToggleCategoryVisibility(category)}
+                            disabled={categoryActionId === category.id}
+                          >
+                            {categoryActionId === category.id
+                              ? 'Salvando...'
+                              : category.visible ? 'Ocultar' : 'Mostrar'}
+                          </button>
+                        </td>
+                      </tr>
+                      {expandedCategoryId === category.id && (
+                        <tr className={category.visible ? '' : 'hidden-row'}>
+                          <td colSpan={3}>
+                            <div className="settings-form settings-form-wide">
+                              <div className="form-group">
+                                <label htmlFor={`desc-${category.id}`}>
+                                  Descrição pública (aparece na página de Produtos quando essa categoria é expandida)
+                                </label>
+                                <textarea
+                                  id={`desc-${category.id}`}
+                                  rows={4}
+                                  value={descriptionDraft}
+                                  onChange={(e) => setDescriptionDraft(e.target.value)}
+                                  placeholder="Descreva essa categoria para os clientes..."
+                                />
+                              </div>
+                              <div className="quick-actions">
+                                <button
+                                  className="action-btn"
+                                  onClick={() => handleSaveDescription(category)}
+                                  disabled={descriptionSavingId === category.id}
+                                >
+                                  {descriptionSavingId === category.id ? 'Salvando...' : 'Salvar descrição'}
+                                </button>
+                                <button
+                                  type="button"
+                                  className="cancel-btn"
+                                  onClick={() => setExpandedCategoryId(null)}
+                                >
+                                  Cancelar
+                                </button>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
                   ))}
                 </tbody>
               </table>
             </div>
           )}
         </section>
+        )}
 
+        {activeSection === 'produtos' && (
         <section className="content-section">
           <h2>Produtos Cadastrados</h2>
           {productsLoading ? (
@@ -252,6 +347,7 @@ function DashboardProducts() {
             </div>
           )}
         </section>
+        )}
       </div>
 
       {showProductForm && (

@@ -6,6 +6,7 @@ import './HeaderResponsive.css';
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
+  const isAdminLoggedIn = Boolean(localStorage.getItem('adminToken'));
 
   function handleEncomendar() {
     if (location.pathname === '/contact') {
@@ -46,7 +47,12 @@ function Header() {
           </ul>
         </nav>
         <div className="header-actions">
-          <button className="login-btn" onClick={() => handleNav('/admin/login')}>Login</button>
+          <button
+            className="login-btn"
+            onClick={() => handleNav(isAdminLoggedIn ? '/admin/dashboard' : '/admin/login')}
+          >
+            {isAdminLoggedIn ? 'Dashboard' : 'Login'}
+          </button>
           <button className="encomendar-btn" onClick={handleEncomendar}>Encomendar</button>
         </div>
       </div>

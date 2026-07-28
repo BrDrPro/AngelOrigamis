@@ -16,4 +16,8 @@ export const Category = sequelize.define('Category', {
     allowNull: false,
     defaultValue: true,
   },
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
 });
