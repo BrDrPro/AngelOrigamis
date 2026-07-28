@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
 import { Order, Product } from '../models';
+import { isValidEmail, isNonEmptyString } from '../utils/validators';
+
+const MAX_ITEMS_PER_ORDER = 50;
 
 const VALID_STATUSES = ['novo', 'em_andamento', 'concluido', 'cancelado'];
 
@@ -25,12 +28,16 @@ export default class OrderController {
     try {
       const { customerName, customerPhone, customerEmail, items } = req.body;
 
-      if (!customerName || !customerPhone || !customerEmail || !items) {
+      if (!isNonEmptyString(customerName, 120) || !isNonEmptyString(customerPhone, 30)) {
         return res.status(400).json({ message: 'Nome, telefone, e-mail e itens são obrigatórios' });
       }
 
-      if (!Array.isArray(items) || items.length === 0) {
-        return res.status(400).json({ message: 'O pedido precisa ter ao menos um item' });
+      if (!isValidEmail(customerEmail)) {
+        return res.status(400).json({ message: 'E-mail inválido' });
+      }
+
+      if (!Array.isArray(items) || items.length === 0 || items.length > MAX_ITEMS_PER_ORDER) {
+        return res.status(400).json({ message: 'O pedido precisa ter entre 1 e 50 itens' });
       }
 
       // Preço e nome vêm sempre do banco, nunca do que o cliente mandou -
@@ -55,9 +62,9 @@ export default class OrderController {
       const total = resolvedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
       const order = await Order.create({
-        customerName,
-        customerPhone,
-        customerEmail,
+        customerName: customerName.trim(),
+        customerPhone: customerPhone.trim(),
+        customerEmail: customerEmail.trim(),
         items: resolvedItems,
         total,
         status: 'novo',

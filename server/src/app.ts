@@ -1,10 +1,12 @@
 import 'dotenv/config';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import routes from './routes/index';
 import authRoutes from './routes/auth.routes';
 import { sequelize } from './models';
+
+const isProduction = process.env.NODE_ENV === 'production';
 
 const app = express();
 
@@ -18,12 +20,14 @@ app.use(helmet());
 app.set('trust proxy', 1);
 
 const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:3001',
-  'http://127.0.0.1:3000',
-  'http://127.0.0.1:3001',
   'https://angelorigamis.com.br',
-  'https://www.angelorigamis.com.br'
+  'https://www.angelorigamis.com.br',
+  ...(isProduction ? [] : [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:3001',
+  ]),
 ];
 
 app.use(cors({
@@ -35,6 +39,16 @@ app.use(express.json());
 // Rotas
 app.use('/api/auth', authRoutes);
 app.use('/api', routes);
+
+// Handler de erro global - captura qualquer erro que escape dos try/catch dos
+// controllers (ex: multer, JSON malformado) e evita vazar stack trace em produção.
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error('Erro não tratado:', err);
+  res.status(500).json({
+    message: 'Erro interno do servidor',
+    ...(isProduction ? {} : { stack: err.stack }),
+  });
+});
 
 // Sincroniza os models com o banco de dados
 sequelize.sync({ alter: true }).then(() => {

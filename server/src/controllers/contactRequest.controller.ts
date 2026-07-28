@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { ContactRequest } from '../models';
+import { isValidEmail, isNonEmptyString } from '../utils/validators';
 
 export default class ContactRequestController {
   static async getAll(req: Request, res: Response) {
@@ -18,15 +19,19 @@ export default class ContactRequestController {
     try {
       const { name, email, productType, details } = req.body;
 
-      if (!name || !email || !productType || !details) {
+      if (!isNonEmptyString(name, 120) || !isNonEmptyString(productType, 120) || !isNonEmptyString(details, 2000)) {
         return res.status(400).json({ message: 'Nome, e-mail, tipo de produto e detalhes são obrigatórios' });
       }
 
+      if (!isValidEmail(email)) {
+        return res.status(400).json({ message: 'E-mail inválido' });
+      }
+
       const request = await ContactRequest.create({
-        name,
-        email,
-        productType,
-        details,
+        name: name.trim(),
+        email: email.trim(),
+        productType: productType.trim(),
+        details: details.trim(),
         read: false,
       });
 
