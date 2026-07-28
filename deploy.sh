@@ -31,7 +31,7 @@ sudo rsync -a --delete "$CLIENT_DIR/build/" "$NGINX_ROOT/"
 sudo chown -R www-data:www-data "$NGINX_ROOT"
 
 echo "== Reiniciando backend =="
-pm2 restart "$PM2_NAME" --update-env
+NODE_ENV=production pm2 restart "$PM2_NAME" --update-env
 
 echo "== Deploy concluído =="
 pm2 list

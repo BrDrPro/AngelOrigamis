@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Testimonial } from '../models';
+import { isNonEmptyString } from '../utils/validators';
 
 export default class TestimonialController {
   static async getApproved(req: Request, res: Response) {
@@ -31,13 +32,13 @@ export default class TestimonialController {
     try {
       const { name, message } = req.body;
 
-      if (!name || !message) {
+      if (!isNonEmptyString(name, 80) || !isNonEmptyString(message, 120)) {
         return res.status(400).json({ message: 'Nome e recado são obrigatórios' });
       }
 
       const testimonial = await Testimonial.create({
-        name,
-        message: String(message).slice(0, 120),
+        name: name.trim(),
+        message: message.trim(),
         approved: false,
       });
 

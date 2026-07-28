@@ -12,6 +12,10 @@ export default class AuthController {
 
       const result = await AuthService.login(email, password);
 
+      if (result === 'locked') {
+        return res.status(429).json({ message: 'Muitas tentativas com este e-mail. Tente novamente mais tarde.' });
+      }
+
       if (!result) {
         return res.status(401).json({ message: 'Credenciais inválidas' });
       }
@@ -48,8 +52,8 @@ export default class AuthController {
         return res.status(400).json({ message: 'Senha atual e nova senha são obrigatórias' });
       }
 
-      if (newPassword.length < 6) {
-        return res.status(400).json({ message: 'A nova senha deve ter pelo menos 6 caracteres' });
+      if (newPassword.length < 8) {
+        return res.status(400).json({ message: 'A nova senha deve ter pelo menos 8 caracteres' });
       }
 
       const success = await AuthService.changePassword(admin.id, currentPassword, newPassword);

@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs/promises';
 import ProductService from '../services/product.service';
 import CategoryService from '../services/category.service';
+import { isNonEmptyString, isPositiveFiniteNumber } from '../utils/validators';
 
 const getClientProductsDir = () => {
   if (process.env.PRODUCTS_UPLOAD_DIR) {
@@ -103,8 +104,16 @@ export default class ProductController {
       const { name, description, price, category, subcategory, measure, imageUrls } = req.body;
       const files = (req as { files?: UploadedFile[] }).files ?? [];
 
-      if (!name || !price || !category) {
+      if (!isNonEmptyString(name, 150) || !isNonEmptyString(category, 100)) {
         return res.status(400).json({ message: 'Nome, preço e categoria são obrigatórios' });
+      }
+
+      if (!isPositiveFiniteNumber(price)) {
+        return res.status(400).json({ message: 'Preço inválido' });
+      }
+
+      if (!isNonEmptyString(description, 5000)) {
+        return res.status(400).json({ message: 'Descrição é obrigatória' });
       }
 
       // Busca (ou cria, se for novo) a categoria/subcategoria - a pasta de imagens
@@ -182,8 +191,16 @@ export default class ProductController {
         return res.status(404).json({ message: 'Produto não encontrado' });
       }
 
-      if (!name || !price || !category) {
+      if (!isNonEmptyString(name, 150) || !isNonEmptyString(category, 100)) {
         return res.status(400).json({ message: 'Nome, preço e categoria são obrigatórios' });
+      }
+
+      if (!isPositiveFiniteNumber(price)) {
+        return res.status(400).json({ message: 'Preço inválido' });
+      }
+
+      if (!isNonEmptyString(description, 5000)) {
+        return res.status(400).json({ message: 'Descrição é obrigatória' });
       }
 
       const categoryRecord = await CategoryService.findOrCreateCategory(category);
