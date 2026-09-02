@@ -56,7 +56,26 @@ echo "== Buildando frontend =="
 npm run build
 
 echo "== Publicando build no Nginx =="
-sudo rsync -a --delete "$CLIENT_DIR/build/" "$NGINX_ROOT/"
+# --delete apaga da pasta do Nginx tudo que não existir no build novo - mas
+# imagens de produto e de conteúdo do site são enviadas em runtime pelo
+# backend, nunca fazem parte do build. Sem excluir essas pastas, todo deploy
+# apagaria esses uploads. As pastas excluídas são lidas do .env pra não
+# depender de nome fixo.
+RSYNC_EXCLUDES=(--exclude 'assets/site-content')
+
+PRODUCTS_DIR_ENV=$(grep -E '^PRODUCTS_UPLOAD_DIR=' "$ENV_FILE" 2>/dev/null | cut -d '=' -f2-)
+if [ -n "$PRODUCTS_DIR_ENV" ] && [[ "$PRODUCTS_DIR_ENV" == "$NGINX_ROOT"/* ]]; then
+  REL_PRODUCTS_DIR="${PRODUCTS_DIR_ENV#$NGINX_ROOT/}"
+  RSYNC_EXCLUDES+=(--exclude "$REL_PRODUCTS_DIR")
+fi
+
+SITE_CONTENT_DIR_ENV=$(grep -E '^SITE_CONTENT_UPLOAD_DIR=' "$ENV_FILE" 2>/dev/null | cut -d '=' -f2-)
+if [ -n "$SITE_CONTENT_DIR_ENV" ] && [[ "$SITE_CONTENT_DIR_ENV" == "$NGINX_ROOT"/* ]]; then
+  REL_SITE_CONTENT_DIR="${SITE_CONTENT_DIR_ENV#$NGINX_ROOT/}"
+  RSYNC_EXCLUDES+=(--exclude "$REL_SITE_CONTENT_DIR")
+fi
+
+sudo rsync -a --delete "${RSYNC_EXCLUDES[@]}" "$CLIENT_DIR/build/" "$NGINX_ROOT/"
 sudo chown -R www-data:www-data "$NGINX_ROOT"
 
 echo "== Reiniciando backend =="
