@@ -5,19 +5,55 @@
   }
 
   .header-container {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
+    justify-content: center;
     padding: 0.7rem 0.5rem;
-    gap: 0.5rem;
+    gap: 0.5rem 1rem;
+  }
+
+  /* Tira o .header-actions do fluxo (os filhos - login e encomendar - viram
+     itens diretos do header-container) pra poder posicionar cada um sem
+     mudar a estrutura no JSX. */
+  .header-actions {
+    display: contents;
+  }
+
+  /* Dashboard/Login some no mobile. */
+  .login-btn {
+    display: none !important;
+  }
+
+  /* Logo e menu de navegação lado a lado na mesma linha, Encomendar numa
+     linha própria centralizada logo abaixo (flex-basis:100% força a quebra). */
+  .logo {
+    order: 1;
+  }
+
+  .main-nav {
+    order: 2;
+  }
+
+  .encomendar-btn {
+    order: 3;
+    flex-basis: 100%;
   }
 
   .main-nav ul {
-    flex-direction: column;
-    gap: 0.5rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem 1rem;
   }
 
   .main-nav li {
     margin-left: 0;
+  }
+
+  .main-nav a,
+  .nav-btn {
+    font-size: 1rem;
   }
 
   .site-logo {
@@ -25,25 +61,19 @@
     max-width: 120px;
   }
 
-  .header-actions {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .encomendar-btn,
-  .login-btn {
-    width: auto !important;
-    max-width: 220px !important;
-    min-width: 120px !important;
-    font-size: 0.9rem !important;
-    padding: 0.15rem 1.2rem !important;
+  /* Altura (padding vertical + font-size) igual à do botão "Ver Produtos"
+     (.cta-button) da Home nesse mesmo breakpoint. */
+  .encomendar-btn {
+    width: 128px !important;
+    max-width: 128px !important;
+    min-width: 128px !important;
+    font-size: 0.85rem !important;
+    padding: 0.35rem 0.4rem !important;
     border-radius: 4px !important;
-    display: inline-block !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     box-sizing: border-box !important;
-  }
-
-  .encomendar-btn,
-  .login-btn {
     background: var(--rosa-logo) !important;
     color: var(--bege-logo) !important;
   }
@@ -51,7 +81,8 @@
 
 @media (max-width: 480px) {
   .header-container {
-    padding: 0.4rem 0.2rem;
+    padding: 0.4rem 0.3rem;
+    gap: 0.35rem;
   }
 
   .site-logo {
@@ -65,10 +96,10 @@
   }
 
   .encomendar-btn {
-    font-size: 0.8rem !important;
-    padding: 0.12rem 0.8rem !important;
+    font-size: 0.75rem !important;
+    padding: 0.25rem 0.3rem !important;
+    width: 100px !important;
     min-width: 100px !important;
-    max-width: 180px !important;
-    width: auto !important;
+    max-width: 100px !important;
   }
 }

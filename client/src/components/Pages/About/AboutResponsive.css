@@ -23,7 +23,8 @@
     text-align: center;
   }
   .about-hero-image img {
-    width: 220px;
+    width: 85%;
+    max-width: 340px;
     margin-bottom: 1rem;
   }
   .about-hero-content h1 {
@@ -86,7 +87,8 @@
     font-size: 0.95rem;
   }
   .about-hero-image img {
-    width: 120px;
+    width: 90%;
+    max-width: 260px;
   }
   .about-content h2 {
     font-size: 1.1rem;

@@ -3,6 +3,29 @@
     padding: 0.5rem;
   }
 
+  /* No modal de detalhes, os botões viram só ícone no mobile. */
+  .modal-actions .btn-icon {
+    display: inline;
+    font-size: 1.2rem;
+  }
+
+  .modal-actions .btn-label {
+    display: none;
+  }
+
+  .modal-actions > button {
+    padding: 0.6rem !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    border-radius: 50% !important;
+  }
+
+  /* No mobile todos os produtos em destaque já aparecem de uma vez (sem
+     paginação), então os dots de navegação do carrossel não fazem sentido. */
+  .carousel-dots {
+    display: none;
+  }
+
   .hero {
     padding: 1rem;
     margin-bottom: 1rem;
@@ -63,8 +86,8 @@
   }
 
   .product-card h3 {
-    font-size: 1rem;
-    margin: 0.5rem 0;
+    font-size: 1.2rem;
+    margin: 1.2rem 0 0.5rem;
   }
 
   .add-cart-btn,
@@ -117,10 +140,17 @@
     display: block;
   }
 
+  .modal-card {
+    padding: 1.25rem 1rem;
+    max-width: 92vw;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
   .modal-card .product-image-container {
-    height: 220px;
-    min-height: 180px;
-    max-height: 240px;
+    height: 52vh;
+    min-height: 300px;
+    max-height: 420px;
   }
 
   .carousel-button.prev,
@@ -149,7 +179,8 @@
   }
 
   .product-card h3 {
-    font-size: 0.95rem;
+    font-size: 1.1rem;
+    margin: 1rem 0 0.4rem;
   }
 
   .add-cart-btn,
@@ -167,10 +198,14 @@
     height: 120px;
   }
 
+  .modal-card {
+    padding: 1rem 0.75rem;
+  }
+
   .modal-card .product-image-container {
-    height: 140px;
-    min-height: 120px;
-    max-height: 160px;
+    height: 46vh;
+    min-height: 240px;
+    max-height: 340px;
   }
 
   .carousel-item {

@@ -12,6 +12,7 @@
     "seed:faqs": "ts-node src/scripts/seedFaqs.ts",
     "seed:about": "ts-node src/scripts/seedAboutContent.ts",
     "seed:home": "ts-node src/scripts/seedHomeContent.ts",
+    "fix:store-settings-encoding": "ts-node src/scripts/fixStoreSettingsEncoding.ts",
     "build": "tsc",
     "lint": "eslint . --ext .ts"
   },

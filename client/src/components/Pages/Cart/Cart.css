@@ -69,6 +69,27 @@
   background: #6D9E8B;
   color: #fff;
 }
+.cart-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: #6D9E8B;
+}
+
+.cart-total-value {
+  color: #D19AAE;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
 .clear-cart-btn {
   margin-top: 1.5rem;
   background: #D19AAE;
