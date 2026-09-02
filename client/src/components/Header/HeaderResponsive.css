@@ -38,6 +38,7 @@
   .encomendar-btn {
     order: 3;
     flex-basis: 100%;
+    margin-top: 0.85rem !important;
   }
 
   .main-nav ul {
