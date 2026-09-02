@@ -1,43 +1,66 @@
+/* Abaixo de 768px o carrossel horizontal vira uma galeria em grid:
+   só imagem + nome do produto. O resto (descrição, preço, adicionar ao
+   carrinho) já existe no modal que abre ao tocar no card - não precisa
+   duplicar aqui, só esconder no card. */
 @media (max-width: 768px) {
   .carousel-container {
-    overflow-x: auto;
-    padding: 0 8px;
-    -webkit-overflow-scrolling: touch;
+    overflow: visible;
+    min-height: 0;
+    padding: 0;
   }
+
   .carousel-track {
-    display: flex;
-    gap: 8px;
-    scroll-snap-type: x mandatory;
-    overflow-x: auto;
-    justify-content: flex-start !important;
-    -webkit-overflow-scrolling: touch;
-    width: max-content;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 0.75rem;
+    justify-content: unset;
+    padding-left: 0;
+    width: 100%;
   }
+
   .carousel-item {
-    flex: 0 0 140px;
-    max-width: 140px;
-    min-width: 100px;
-    scroll-snap-align: center;
+    flex: none;
+    max-width: none;
+    min-width: 0;
     margin: 0;
   }
+
+  .carousel-item .product-card {
+    width: 100%;
+  }
+
+  .carousel-item .product-image-container {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18), 0 4px 8px rgba(0, 0, 0, 0.12);
+  }
+
+  .carousel-item .product-card h4 {
+    padding: 1.4rem 0.4rem 0.35rem;
+    font-size: 1.2rem;
+  }
+
+  /* Esconde descrição/preço/adicionar ao carrinho do card - só aparece
+     no modal de detalhes, aberto ao tocar no card. */
+  .carousel-item .product-card-content {
+    display: none;
+  }
+
   .carousel-button.prev,
   .carousel-button.next {
     display: none !important;
   }
-  .carousel-container,
-  .carousel-track {
-    scrollbar-width: none;        /* Firefox */
-    -ms-overflow-style: none;     /* IE e Edge */
-  }
-  .carousel-container::-webkit-scrollbar,
-  .carousel-track::-webkit-scrollbar {
-    display: none;                /* Chrome, Safari e Opera */
-  }
 }
+
 @media (max-width: 480px) {
-  .carousel-item {
-    flex: 0 0 110px;
-    max-width: 110px;
-    min-width: 80px;
+  .carousel-track {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .carousel-item .product-card h4 {
+    font-size: 1.1rem;
+    padding: 1.2rem 0.3rem 0.3rem;
   }
 }

@@ -14,12 +14,13 @@ function Cart() {
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   const canCheckout = cart.length > 0 && customerName.trim() && customerPhone.trim() && customerEmail.trim();
+  const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   async function handleCheckout() {
     if (!canCheckout) return;
     setCheckoutLoading(true);
 
-    const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const total = cartTotal;
 
     try {
       await createOrder({
@@ -81,6 +82,12 @@ function Cart() {
               </li>
             ))}
           </ul>
+          <div className="cart-total">
+            <span>Total</span>
+            <span className="cart-total-value">
+              R$ {cartTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+            </span>
+          </div>
           <div className="customer-info-form">
             <h2>Seus dados</h2>
             <div className="customer-info-row">

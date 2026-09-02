@@ -1,6 +1,6 @@
 // Atualização Natal 2024
 
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { CartContext } from '../../CartContext/CartContext';
 import { fetchProducts } from '../../../api/products';
 import { fetchCategories } from '../../../api/categories';
@@ -28,6 +28,7 @@ function Services() {
 	const [products, setProducts] = useState([]);
 	const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 	const [categoryDescriptions, setCategoryDescriptions] = useState({});
+	const touchStartX = useRef(null);
 
 	useEffect(() => {
 		fetchProducts().then(setProducts).catch(console.error);
@@ -91,6 +92,34 @@ function Services() {
 			...prev,
 			[categoryId]: !prev[categoryId],
 		}));
+	}
+
+	// Arrastar (swipe) pra trocar de imagem no modal - só dispositivos touch,
+	// o desktop continua usando as setas normalmente.
+	function handleModalTouchStart(e) {
+		touchStartX.current = e.touches[0].clientX;
+	}
+
+	function handleModalTouchEnd(e) {
+		const startX = touchStartX.current;
+		touchStartX.current = null;
+
+		if (startX === null || !expandedProduct?.imageUrls || expandedProduct.imageUrls.length <= 1) {
+			return;
+		}
+
+		const deltaX = e.changedTouches[0].clientX - startX;
+		const threshold = 40;
+
+		if (deltaX > threshold) {
+			setModalImageIndex((idx) =>
+				idx === 0 ? expandedProduct.imageUrls.length - 1 : idx - 1
+			);
+		} else if (deltaX < -threshold) {
+			setModalImageIndex((idx) =>
+				idx === expandedProduct.imageUrls.length - 1 ? 0 : idx + 1
+			);
+		}
 	}
 
 	return (
@@ -185,9 +214,6 @@ function Services() {
 																	backgroundSize: 'cover',
 																	backgroundPosition: 'center',
 																	backgroundRepeat: 'no-repeat',
-																	borderRadius: '8px',
-																	width: '100%',
-																	height: '300px',
 																}}
 															/>
 															<h4>{product.name}</h4>
@@ -249,20 +275,17 @@ function Services() {
 					<div className="modal-card" onClick={(e) => e.stopPropagation()}>
 						<div
 							className="product-image-container"
-							style={{
-								backgroundImage: expandedProduct.imageUrls
-									? `url(${expandedProduct.imageUrls[modalImageIndex]})`
-									: undefined,
-								backgroundSize: 'contain',
-								backgroundPosition: 'center',
-								backgroundRepeat: 'no-repeat',
-								borderRadius: '8px',
-								width: '100%',
-								height: '380px',
-								marginBottom: '1rem',
-								backgroundColor: 'var(--bege-logo)',
-							}}
+							style={{ marginBottom: '1rem' }}
+							onTouchStart={handleModalTouchStart}
+							onTouchEnd={handleModalTouchEnd}
 						>
+							{expandedProduct.imageUrls && (
+								<img
+									className="modal-product-image"
+									src={expandedProduct.imageUrls[modalImageIndex]}
+									alt={expandedProduct.name}
+								/>
+							)}
 							{expandedProduct.imageUrls &&
 								expandedProduct.imageUrls.length > 1 && (
 									<>
@@ -308,21 +331,27 @@ function Services() {
 								? `R$ ${Number(expandedProduct.price).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
 								: expandedProduct.price}
 						</span>
-						<button
-							className="add-cart-btn"
-							onClick={() => handleAdd(expandedProduct)}
-						>
-							Adicionar ao Carrinho
-						</button>
-						<button
-							className="close-btn"
-							onClick={() => {
-								setExpandedProduct(null);
-								setModalImageIndex(0);
-							}}
-						>
-							Fechar
-						</button>
+						<div className="modal-actions">
+							<button
+								className="add-cart-btn"
+								onClick={() => handleAdd(expandedProduct)}
+								aria-label="Adicionar ao Carrinho"
+							>
+								<span className="btn-icon" aria-hidden="true">🛒</span>
+								<span className="btn-label">Adicionar ao Carrinho</span>
+							</button>
+							<button
+								className="modal-close-btn"
+								onClick={() => {
+									setExpandedProduct(null);
+									setModalImageIndex(0);
+								}}
+								aria-label="Fechar"
+							>
+								<span className="btn-icon" aria-hidden="true">✕</span>
+								<span className="btn-label">Fechar</span>
+							</button>
+						</div>
 					</div>
 				</div>
 			)}

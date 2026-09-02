@@ -162,8 +162,8 @@
 }
 
 .product-card h3 {
-  font-size: 1.3rem;
-  margin: 1rem 0 0.5rem 0;
+  font-size: 1.55rem;
+  margin: 1.75rem 0 0.5rem 0;
   text-align: center;
   font-family: var(--fonte-titulo);
   color: var(--rosa-logo);
@@ -793,7 +793,7 @@
 }
 
 .modal-card {
-  background: #fff;
+  background: var(--bege-logo);
   border-radius: 12px;
   padding: 2rem;
   max-width: 400px;
@@ -804,15 +804,58 @@
   align-items: center;
 }
 
-.close-btn {
+.modal-close-btn {
   margin-top: 1rem;
   background: var(--rosa-logo);
   color: var(--bege-logo);
   border: none;
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 0.9rem;
   border-radius: 4px;
+  font-family: var(--fonte-texto);
+  font-size: 0.85rem;
   font-weight: bold;
   cursor: pointer;
+  transition: background 0.3s;
+}
+
+.modal-close-btn:hover {
+  background: var(--verde-logo);
+}
+
+.modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+/* .add-cart-btn recebe várias regras com !important em telas pequenas
+   (largura 100%, display:block, fonte/padding menores) - dentro do modal
+   isso precisa ser sobrescrito também com !important pra manter os dois
+   botões lado a lado, do mesmo tamanho, em qualquer largura de tela. */
+.modal-actions > button {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+  padding: 0.55rem 1.1rem !important;
+  font-size: 0.9rem !important;
+}
+
+/* No desktop mostra só o texto; no mobile (ver ServicesResponsive.css /
+   HomeResponsive.css) troca pra só o ícone. */
+.modal-actions .btn-icon {
+  display: none;
+}
+
+.modal-actions .btn-label {
+  display: inline;
 }
 
 .desc-btn {
@@ -870,6 +913,8 @@
   right: 16px;
 }
 
+/* Só um espaço reservado pra centralizar a imagem e ancorar as setas -
+   sem fundo/sombra próprios, pra não sobrar "caixa" em volta da foto. */
 .modal-card .product-image-container {
   width: 100%;
   height: 380px;           /* aumenta espaço vertical */
@@ -878,12 +923,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
   position: relative;
-  background: var(--bege-logo);
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  border: 1px solid #eee;
+}
+
+/* Sombra e cantos arredondados seguem só o contorno real da imagem. */
+.modal-product-image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  border-radius: 20px;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.22), 0 6px 14px rgba(0, 0, 0, 0.14);
 }
 
 .measure {

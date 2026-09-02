@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useContext, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 import './HomeResponsive.css'
@@ -28,6 +28,35 @@ function Home() {
   const [newsletterMsg, setNewsletterMsg] = useState('');
   const [modalImageIndex, setModalImageIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const touchStartX = useRef(null);
+
+  // Arrastar (swipe) pra trocar de imagem no modal - só dispositivos touch,
+  // o desktop continua usando as setas normalmente.
+  function handleModalTouchStart(e) {
+    touchStartX.current = e.touches[0].clientX;
+  }
+
+  function handleModalTouchEnd(e) {
+    const startX = touchStartX.current;
+    touchStartX.current = null;
+
+    if (startX === null || !expandedProduct?.imageUrls || expandedProduct.imageUrls.length <= 1) {
+      return;
+    }
+
+    const deltaX = e.changedTouches[0].clientX - startX;
+    const threshold = 40;
+
+    if (deltaX > threshold) {
+      setModalImageIndex((idx) =>
+        idx === 0 ? expandedProduct.imageUrls.length - 1 : idx - 1
+      );
+    } else if (deltaX < -threshold) {
+      setModalImageIndex((idx) =>
+        idx === expandedProduct.imageUrls.length - 1 ? 0 : idx + 1
+      );
+    }
+  }
 
   // Definir produtos em destaque iniciais
   useEffect(() => {
@@ -325,18 +354,15 @@ function Home() {
             <div className="modal-card" onClick={e => e.stopPropagation()}>
               <div
                 className="product-image-container"
-                style={{
-                  backgroundImage: `url(${expandedProduct.imageUrls[modalImageIndex]})`,
-                  backgroundSize: 'contain',           // <-- mostra a imagem inteira
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                  borderRadius: '8px',
-                  width: '100%',
-                  height: '380px',
-                  marginBottom: '1rem',
-                  backgroundColor: 'var(--bege-logo)'  // garante fundo bege
-                }}
+                style={{ marginBottom: '1rem' }}
+                onTouchStart={handleModalTouchStart}
+                onTouchEnd={handleModalTouchEnd}
               >
+                <img
+                  className="modal-product-image"
+                  src={expandedProduct.imageUrls[modalImageIndex]}
+                  alt={expandedProduct.name}
+                />
                 {expandedProduct.imageUrls.length > 1 && (
                   <>
                     <button
@@ -375,16 +401,20 @@ function Home() {
               <span className="price">
                 R$ {Number(expandedProduct.price).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
               </span>
-              <button className="add-cart-btn" onClick={() => handleAdd(expandedProduct)}>
-                Adicionar ao Carrinho
-              </button>
-              <button className="close-btn" onClick={() => {
-                setExpandedProduct(null);
-                setCarouselPaused(false);
-                setModalImageIndex(0);
-              }}>
-                Fechar
-              </button>
+              <div className="modal-actions">
+                <button className="add-cart-btn" onClick={() => handleAdd(expandedProduct)} aria-label="Adicionar ao Carrinho">
+                  <span className="btn-icon" aria-hidden="true">🛒</span>
+                  <span className="btn-label">Adicionar ao Carrinho</span>
+                </button>
+                <button className="modal-close-btn" onClick={() => {
+                  setExpandedProduct(null);
+                  setCarouselPaused(false);
+                  setModalImageIndex(0);
+                }} aria-label="Fechar">
+                  <span className="btn-icon" aria-hidden="true">✕</span>
+                  <span className="btn-label">Fechar</span>
+                </button>
+              </div>
             </div>
           </div>
         )}
