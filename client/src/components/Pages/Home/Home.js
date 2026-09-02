@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './Home.css';
 import './HomeResponsive.css'
 import { CartContext } from '../../CartContext/CartContext';
-import { fetchProducts } from '../../../api/products';
+import { fetchFeaturedProducts } from '../../../api/products';
 import { fetchTestimonials } from '../../../api/testimonials';
 import { fetchHomeContent } from '../../../api/homeContent';
 import { apiFetch } from '../../../api/apiClient';
@@ -58,9 +58,9 @@ function Home() {
     }
   }
 
-  // Definir produtos em destaque iniciais
+  // Produtos em destaque - curados pelo admin no dashboard.
   useEffect(() => {
-    fetchProducts()
+    fetchFeaturedProducts()
       .then(setFeaturedProducts)
       .catch(console.error);
   }, []);
@@ -164,29 +164,6 @@ function Home() {
     }
   }
 
-  // Supondo que cada produto tem a propriedade 'category'
-  function getRandomProductsByCategory(products) {
-    const grouped = {};
-    products.forEach(prod => {
-      if (!grouped[prod.category]) grouped[prod.category] = [];
-      grouped[prod.category].push(prod);
-    });
-
-    // Seleciona um produto aleatório de cada categoria
-    return Object.values(grouped).map(categoryProducts => {
-      const idx = Math.floor(Math.random() * categoryProducts.length);
-      return categoryProducts[idx];
-    });
-  }
-
-  // No useEffect ou onde você carrega os produtos:
-  useEffect(() => {
-    fetchProducts()
-      .then(allProducts => {
-        setFeaturedProducts(getRandomProductsByCategory(allProducts));
-      })
-      .catch(console.error);
-  }, []);
 
   useEffect(() => {
     function handleResize() {

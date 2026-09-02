@@ -8,8 +8,16 @@ export async function fetchAllProducts() {
   return apiFetch('/products/all', { auth: true });
 }
 
+export async function fetchFeaturedProducts() {
+  return apiFetch('/products/featured');
+}
+
 export async function updateProductVisibility(id, visible) {
   return apiFetch(`/products/${id}/visibility`, { method: 'PATCH', body: { visible }, auth: true });
+}
+
+export async function updateProductFeatured(id, featured) {
+  return apiFetch(`/products/${id}/featured`, { method: 'PATCH', body: { featured }, auth: true });
 }
 
 export async function createProduct(formData) {

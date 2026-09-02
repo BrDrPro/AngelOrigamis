@@ -4,7 +4,7 @@ import ProductForm from '../ProductForm/ProductForm';
 import Pagination, { usePagination } from '../Pagination/Pagination';
 import FilterSelect from '../FilterSelect/FilterSelect';
 import SiteContentSection from './SiteContentSection';
-import { fetchAllProducts, deleteProduct, updateProductVisibility } from '../../../../api/products';
+import { fetchAllProducts, deleteProduct, updateProductVisibility, updateProductFeatured } from '../../../../api/products';
 import { fetchCategories, updateCategoryVisibility, updateCategoryDescription } from '../../../../api/categories';
 
 const SECTIONS = [
@@ -24,11 +24,18 @@ function DashboardProducts() {
   const [productsError, setProductsError] = useState('');
   const [deletingId, setDeletingId] = useState(null);
   const [visibilityActionId, setVisibilityActionId] = useState(null);
+  const [featuredActionId, setFeaturedActionId] = useState(null);
   const [productSearch, setProductSearch] = useState('');
   const [productCategoryFilter, setProductCategoryFilter] = useState('');
   const [productStatusFilter, setProductStatusFilter] = useState('');
+  const [productFeaturedFilter, setProductFeaturedFilter] = useState('');
+  const [productPriceMin, setProductPriceMin] = useState('');
+  const [productPriceMax, setProductPriceMax] = useState('');
 
   const filteredProducts = useMemo(() => {
+    const minPrice = productPriceMin.trim() ? Number(productPriceMin) : null;
+    const maxPrice = productPriceMax.trim() ? Number(productPriceMax) : null;
+
     return products.filter((product) => {
       if (productSearch.trim() && !product.name.toLowerCase().includes(productSearch.trim().toLowerCase())) {
         return false;
@@ -42,15 +49,27 @@ function DashboardProducts() {
       if (productStatusFilter === 'hidden' && product.visible) {
         return false;
       }
+      if (productFeaturedFilter === 'featured' && !product.featured) {
+        return false;
+      }
+      if (productFeaturedFilter === 'not-featured' && product.featured) {
+        return false;
+      }
+      if (minPrice !== null && !Number.isNaN(minPrice) && Number(product.price) < minPrice) {
+        return false;
+      }
+      if (maxPrice !== null && !Number.isNaN(maxPrice) && Number(product.price) > maxPrice) {
+        return false;
+      }
       return true;
     });
-  }, [products, productSearch, productCategoryFilter, productStatusFilter]);
+  }, [products, productSearch, productCategoryFilter, productStatusFilter, productFeaturedFilter, productPriceMin, productPriceMax]);
 
   const { page, setPage, totalPages, pageItems: pagedProducts } = usePagination(filteredProducts);
 
   useEffect(() => {
     setPage(1);
-  }, [productSearch, productCategoryFilter, productStatusFilter, setPage]);
+  }, [productSearch, productCategoryFilter, productStatusFilter, productFeaturedFilter, productPriceMin, productPriceMax, setPage]);
 
   const [categories, setCategories] = useState([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
@@ -160,6 +179,19 @@ function DashboardProducts() {
     }
   };
 
+  const handleToggleProductFeatured = async (product) => {
+    setFeaturedActionId(product.id);
+    try {
+      const updated = await updateProductFeatured(product.id, !product.featured);
+      setProducts((prev) => prev.map((p) => (p.id === product.id ? { ...p, featured: updated.featured } : p)));
+    } catch (error) {
+      console.error('Erro ao atualizar destaque do produto:', error);
+      alert('Não foi possível atualizar o destaque do produto.');
+    } finally {
+      setFeaturedActionId(null);
+    }
+  };
+
   const handleToggleDescriptionEditor = (category) => {
     if (expandedCategoryId === category.id) {
       setExpandedCategoryId(null);
@@ -260,18 +292,17 @@ function DashboardProducts() {
                 <option value="visible">Visíveis</option>
                 <option value="hidden">Ocultas</option>
               </FilterSelect>
-              {(categorySearch || categoryStatusFilter) && (
-                <button
-                  type="button"
-                  className="filter-clear-btn"
-                  onClick={() => {
-                    setCategorySearch('');
-                    setCategoryStatusFilter('');
-                  }}
-                >
-                  Limpar filtros
-                </button>
-              )}
+              <button
+                type="button"
+                className="filter-clear-btn"
+                disabled={!categorySearch && !categoryStatusFilter}
+                onClick={() => {
+                  setCategorySearch('');
+                  setCategoryStatusFilter('');
+                }}
+              >
+                Limpar filtros
+              </button>
             </div>
           )}
 
@@ -375,29 +406,54 @@ function DashboardProducts() {
                 onChange={(e) => setProductSearch(e.target.value)}
               />
               <FilterSelect value={productCategoryFilter} onChange={(e) => setProductCategoryFilter(e.target.value)}>
-                <option value="">Todas as categorias</option>
+                <option value="">Categorias</option>
                 {categories.map((category) => (
                   <option key={category.id} value={category.name}>{category.name}</option>
                 ))}
               </FilterSelect>
               <FilterSelect value={productStatusFilter} onChange={(e) => setProductStatusFilter(e.target.value)}>
-                <option value="">Todos os status</option>
+                <option value="">Status</option>
                 <option value="visible">Visíveis</option>
                 <option value="hidden">Ocultos</option>
               </FilterSelect>
-              {(productSearch || productCategoryFilter || productStatusFilter) && (
-                <button
-                  type="button"
-                  className="filter-clear-btn"
-                  onClick={() => {
-                    setProductSearch('');
-                    setProductCategoryFilter('');
-                    setProductStatusFilter('');
-                  }}
-                >
-                  Limpar filtros
-                </button>
-              )}
+              <FilterSelect value={productFeaturedFilter} onChange={(e) => setProductFeaturedFilter(e.target.value)}>
+                <option value="">Destaque</option>
+                <option value="featured">Em destaque</option>
+                <option value="not-featured">Sem destaque</option>
+              </FilterSelect>
+              <div className="filter-price-group">
+                <span>R$</span>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="mín."
+                  value={productPriceMin}
+                  onChange={(e) => setProductPriceMin(e.target.value)}
+                />
+                <span>-</span>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="máx."
+                  value={productPriceMax}
+                  onChange={(e) => setProductPriceMax(e.target.value)}
+                />
+              </div>
+              <button
+                type="button"
+                className="filter-clear-btn"
+                disabled={!productSearch && !productCategoryFilter && !productStatusFilter && !productFeaturedFilter && !productPriceMin && !productPriceMax}
+                onClick={() => {
+                  setProductSearch('');
+                  setProductCategoryFilter('');
+                  setProductStatusFilter('');
+                  setProductFeaturedFilter('');
+                  setProductPriceMin('');
+                  setProductPriceMax('');
+                }}
+              >
+                Limpar filtros
+              </button>
             </div>
           )}
 
@@ -419,6 +475,7 @@ function DashboardProducts() {
                     <th>Categoria</th>
                     <th>Preço</th>
                     <th>Status</th>
+                    <th>Destaque</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -445,6 +502,7 @@ function DashboardProducts() {
                         })}
                       </td>
                       <td>{product.visible ? 'Visível' : 'Oculto'}</td>
+                      <td>{product.featured ? '⭐ Em destaque' : '—'}</td>
                       <td className="product-actions">
                         <button
                           className={product.visible ? 'delete-product-btn' : 'edit-product-btn'}
@@ -454,6 +512,15 @@ function DashboardProducts() {
                           {visibilityActionId === product.id
                             ? 'Salvando...'
                             : product.visible ? 'Ocultar' : 'Mostrar'}
+                        </button>
+                        <button
+                          className={product.featured ? 'delete-product-btn' : 'edit-product-btn'}
+                          onClick={() => handleToggleProductFeatured(product)}
+                          disabled={featuredActionId === product.id}
+                        >
+                          {featuredActionId === product.id
+                            ? 'Salvando...'
+                            : product.featured ? 'Remover destaque' : 'Destacar'}
                         </button>
                         <button
                           className="edit-product-btn"

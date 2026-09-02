@@ -62,6 +62,16 @@ export default class ProductController {
     }
   }
 
+  static async getFeaturedProducts(req: Request, res: Response) {
+    try {
+      const products = await ProductService.getFeatured();
+      res.json(products);
+    } catch (error) {
+      console.error('Erro ao buscar produtos em destaque:', error);
+      res.status(500).json({ message: 'Erro ao buscar produtos em destaque' });
+    }
+  }
+
   static async setVisibility(req: Request, res: Response) {
     try {
       const { id } = req.params;
@@ -80,6 +90,27 @@ export default class ProductController {
     } catch (error) {
       console.error('Erro ao atualizar visibilidade do produto:', error);
       res.status(500).json({ message: 'Erro ao atualizar visibilidade do produto' });
+    }
+  }
+
+  static async setFeatured(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { featured } = req.body;
+
+      if (typeof featured !== 'boolean') {
+        return res.status(400).json({ message: 'O campo featured deve ser true ou false' });
+      }
+
+      const product = await ProductService.setFeatured(Number(id), featured);
+      if (!product) {
+        return res.status(404).json({ message: 'Produto não encontrado' });
+      }
+
+      res.json(product);
+    } catch (error) {
+      console.error('Erro ao atualizar destaque do produto:', error);
+      res.status(500).json({ message: 'Erro ao atualizar destaque do produto' });
     }
   }
 
