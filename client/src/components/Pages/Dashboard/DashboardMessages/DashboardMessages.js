@@ -166,15 +166,14 @@ function DashboardMessages() {
                 <option value="approved">Aprovados</option>
                 <option value="pending">Pendentes</option>
               </FilterSelect>
-              {testimonialStatusFilter && (
-                <button
-                  type="button"
-                  className="filter-clear-btn"
-                  onClick={() => setTestimonialStatusFilter('')}
-                >
-                  Limpar filtros
-                </button>
-              )}
+              <button
+                type="button"
+                className="filter-clear-btn"
+                disabled={!testimonialStatusFilter}
+                onClick={() => setTestimonialStatusFilter('')}
+              >
+                Limpar filtros
+              </button>
             </div>
           )}
 
@@ -240,15 +239,14 @@ function DashboardMessages() {
                 <option value="unread">Não lidas</option>
                 <option value="read">Lidas</option>
               </FilterSelect>
-              {requestStatusFilter && (
-                <button
-                  type="button"
-                  className="filter-clear-btn"
-                  onClick={() => setRequestStatusFilter('')}
-                >
-                  Limpar filtros
-                </button>
-              )}
+              <button
+                type="button"
+                className="filter-clear-btn"
+                disabled={!requestStatusFilter}
+                onClick={() => setRequestStatusFilter('')}
+              >
+                Limpar filtros
+              </button>
             </div>
           )}
 

@@ -25,3 +25,14 @@ export const productImagesUpload = multer({
     fileSize: 5 * 1024 * 1024,
   },
 });
+
+// Imagens de conteúdo editável do site (ex: página Sobre) - poucos arquivos
+// por requisição, mesmas regras de tipo/tamanho dos produtos.
+export const siteContentImageUpload = multer({
+  storage,
+  fileFilter: imageFileFilter,
+  limits: {
+    files: 2,
+    fileSize: 5 * 1024 * 1024,
+  },
+});

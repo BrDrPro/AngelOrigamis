@@ -10,6 +10,10 @@ export const AboutContent = sequelize.define('AboutContent', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  heroImageUrl: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   // Array de { icon, title, text } - os 3 cards de "Nossa Filosofia"
   philosophyCards: {
     type: DataTypes.JSON,
@@ -19,6 +23,10 @@ export const AboutContent = sequelize.define('AboutContent', {
   originStoryParagraphs: {
     type: DataTypes.JSON,
     allowNull: false,
+  },
+  originStoryImageUrl: {
+    type: DataTypes.STRING,
+    allowNull: true,
   },
   ctaTitle: {
     type: DataTypes.STRING,

@@ -4,6 +4,8 @@ import EmojiPicker from '../EmojiPicker/EmojiPicker';
 
 function AboutContentManager() {
   const [draft, setDraft] = useState(null);
+  const [heroImageFile, setHeroImageFile] = useState(null);
+  const [originStoryImageFile, setOriginStoryImageFile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
@@ -40,8 +42,20 @@ function AboutContentManager() {
     setMessage('');
     setError('');
     try {
-      const updated = await updateAboutContent(draft);
+      const payload = new FormData();
+      payload.append('heroTitle', draft.heroTitle);
+      payload.append('heroBio', draft.heroBio);
+      payload.append('philosophyCards', JSON.stringify(draft.philosophyCards));
+      payload.append('originStoryParagraphs', JSON.stringify(draft.originStoryParagraphs));
+      payload.append('ctaTitle', draft.ctaTitle);
+      payload.append('ctaText', draft.ctaText);
+      if (heroImageFile) payload.append('heroImage', heroImageFile);
+      if (originStoryImageFile) payload.append('originStoryImage', originStoryImageFile);
+
+      const updated = await updateAboutContent(payload);
       setDraft(updated);
+      setHeroImageFile(null);
+      setOriginStoryImageFile(null);
       setMessage('Conteúdo da página Sobre atualizado com sucesso.');
     } catch (err) {
       console.error('Erro ao atualizar conteúdo da página Sobre:', err);
@@ -72,6 +86,24 @@ function AboutContentManager() {
           value={draft.heroBio}
           onChange={(e) => setDraft((prev) => ({ ...prev, heroBio: e.target.value }))}
         />
+      </div>
+
+      <div className="form-group">
+        <label>Foto do topo (Angel trabalhando)</label>
+        <img
+          src={heroImageFile ? URL.createObjectURL(heroImageFile) : draft.heroImageUrl}
+          alt="Prévia da foto do topo"
+          className="content-image-preview"
+        />
+        <label className="action-btn content-image-upload-btn">
+          {heroImageFile ? heroImageFile.name : 'Trocar imagem'}
+          <input
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={(e) => setHeroImageFile(e.target.files[0] || null)}
+          />
+        </label>
       </div>
 
       <h4 className="content-subheading">Cards de "Nossa Filosofia"</h4>
@@ -111,6 +143,24 @@ function AboutContentManager() {
           />
         </div>
       ))}
+
+      <div className="form-group">
+        <label>Foto de "A Arte do Origami"</label>
+        <img
+          src={originStoryImageFile ? URL.createObjectURL(originStoryImageFile) : draft.originStoryImageUrl}
+          alt="Prévia da foto da arte do origami"
+          className="content-image-preview"
+        />
+        <label className="action-btn content-image-upload-btn">
+          {originStoryImageFile ? originStoryImageFile.name : 'Trocar imagem'}
+          <input
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={(e) => setOriginStoryImageFile(e.target.files[0] || null)}
+          />
+        </label>
+      </div>
 
       <h4 className="content-subheading">Chamada final</h4>
       <div className="form-group">

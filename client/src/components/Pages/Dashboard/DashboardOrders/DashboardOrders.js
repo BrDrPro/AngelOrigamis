@@ -115,19 +115,18 @@ function DashboardOrders() {
                 <span>Até</span>
                 <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} />
               </div>
-              {(statusFilter || dateFrom || dateTo) && (
-                <button
-                  type="button"
-                  className="filter-clear-btn"
-                  onClick={() => {
-                    setStatusFilter('');
-                    setDateFrom('');
-                    setDateTo('');
-                  }}
-                >
-                  Limpar filtros
-                </button>
-              )}
+              <button
+                type="button"
+                className="filter-clear-btn"
+                disabled={!statusFilter && !dateFrom && !dateTo}
+                onClick={() => {
+                  setStatusFilter('');
+                  setDateFrom('');
+                  setDateTo('');
+                }}
+              >
+                Limpar filtros
+              </button>
             </div>
           )}
 

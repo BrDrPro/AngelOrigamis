@@ -27,7 +27,10 @@ function About() {
       <section className="about-hero">
         <div className="about-hero-content about-hero-flex">
           <div className="about-hero-image">
-            <img src="/assets/SobreAArtista.jpg" alt="Angel trabalhando com origamis" />
+            <img
+              src={content.heroImageUrl || '/assets/SobreAArtista.jpg'}
+              alt="Angel trabalhando com origamis"
+            />
           </div>
           <div className="about-hero-text">
             <h1>{content.heroTitle}</h1>
@@ -59,7 +62,7 @@ function About() {
           <div className="about-origami">
             <div className="about-origami-container">
               <img
-                src="/assets/CasamentoMeB.jpg"
+                src={content.originStoryImageUrl || '/assets/CasamentoMeB.jpg'}
                 alt="Origami em casamento"
                 className="about-origami-img"
               />
